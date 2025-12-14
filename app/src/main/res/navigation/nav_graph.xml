@@ -6,6 +6,16 @@
     app:startDestination="@id/FirstFragment">
 
     <fragment
+        android:id="@+id/quizTestFragment"
+        android:name="com.example.greenmind.resource.quiz.QuizTestFragment"
+        android:label="Quiz Test">
+        <action
+            android:id="@+id/action_FirstFragment_to_quizTestFragment"
+            app:destination="@id/quizTestFragment" />
+    </fragment>
+
+
+    <fragment
         android:id="@+id/FirstFragment"
         android:name="com.example.greenmind.FirstFragment"
         android:label="@string/first_fragment_label"
