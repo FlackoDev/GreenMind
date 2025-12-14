@@ -8,12 +8,8 @@
     <fragment
         android:id="@+id/quizTestFragment"
         android:name="com.example.greenmind.resource.quiz.QuizTestFragment"
-        android:label="Quiz Test">
-        <action
-            android:id="@+id/action_FirstFragment_to_quizTestFragment"
-            app:destination="@id/quizTestFragment" />
-    </fragment>
-
+        android:label="Quiz Test"
+        tools:layout="@layout/fragment_quiz_test" />
 
     <fragment
         android:id="@+id/FirstFragment"
@@ -22,17 +18,7 @@
         tools:layout="@layout/fragment_first">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.greenmind.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_FirstFragment_to_quizTestFragment"
+            app:destination="@id/quizTestFragment" />
     </fragment>
 </navigation>
