@@ -50,4 +50,5 @@
     <string name="hai_gi_un_account">Hai già un account?</string>
     <string name="accedi">Accedi</string>
     <string name="password">Password</string>
+    <string name="inserisci_l_email_associata_al_tuo_account_per_continuare">Inserisci l\'email associata al tuo account per continuare.</string>
 </resources>
