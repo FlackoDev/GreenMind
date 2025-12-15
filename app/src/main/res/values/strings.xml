@@ -7,6 +7,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="quiz">Quiz</string>
+    <string name="password_dimenticata">Password dimenticata?</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -44,4 +45,9 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="registrati">Registrati</string>
+    <string name="non_hai_un_account">Non hai un account?</string>
+    <string name="hai_gi_un_account">Hai già un account?</string>
+    <string name="accedi">Accedi</string>
+    <string name="password">Password</string>
 </resources>

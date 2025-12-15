@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colori principali dell'app -->
+    <color name="green_primary">#00C853</color> <!-- Un verde brillante per i pulsanti -->    <color name="green_dark">#00796B</color>   <!-- Un verde più scuro per i testi/link -->
+
+    <!-- Colori standard che sono sempre utili -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
