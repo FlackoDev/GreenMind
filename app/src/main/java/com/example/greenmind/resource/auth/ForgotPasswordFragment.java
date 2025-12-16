@@ -1,4 +1,4 @@
-package com.example.greenmind.auth;
+package com.example.greenmind.resource.auth;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

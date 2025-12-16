@@ -1,4 +1,4 @@
-package com.example.greenmind.auth;
+package com.example.greenmind.resource.auth;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -71,6 +71,6 @@ public class LoginFragment extends Fragment {
 
         // **SECONDA PARTE DELLA TUA RICHIESTA**
         // Dopo un login corretto, navighiamo alla pagina dei quiz.
-        NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_quizTestFragment);
+        NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_homeFragment);
     }
 }

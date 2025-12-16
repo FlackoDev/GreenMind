@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.greenmind.auth.LoginFragment"
+        android:name="com.example.greenmind.resource.auth.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -16,15 +16,16 @@
         <action
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
-        <!-- NUOVA AZIONE DIRETTA: Da Login a Quiz -->
         <action
-            android:id="@+id/action_loginFragment_to_quizTestFragment"
-            app:destination="@id/quizTestFragment" />
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.greenmind.auth.RegisterFragment"
+        android:name="com.example.greenmind.resource.auth.RegisterFragment"
         android:label="Register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -34,23 +35,14 @@
 
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.example.greenmind.auth.ForgotPasswordFragment"
+        android:name="com.example.greenmind.resource.auth.ForgotPasswordFragment"
         android:label="ForgotPassword"
         tools:layout="@layout/fragment_forgot_password" />
 
     <fragment
-        android:id="@+id/quizTestFragment"
-        android:name="com.example.greenmind.resource.quiz.QuizTestFragment"
-        android:label="Quiz Test"
-        tools:layout="@layout/fragment_quiz_test" />
+        android:id="@+id/homeFragment"
+        android:name="com.example.greenmind.resource.home.HomeActivity"
+        android:label="Home"
+        tools:layout="@layout/activity_home" />
 
-    <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.greenmind.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-        <action
-            android:id="@+id/action_FirstFragment_to_quizTestFragment"
-            app:destination="@id/quizTestFragment" />
-    </fragment>
 </navigation>
