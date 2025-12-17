@@ -10,7 +10,7 @@
     <!-- Splash Screen Theme -->
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <!-- Imposta il colore di sfondo della splash screen. -->
-        <item name="windowSplashScreenBackground">@color/green_mind_primary</item>
+        <item name="windowSplashScreenBackground">@color/green_primary</item>
         
         <!-- Imposta l'icona al centro. Useremo l'icona di avvio dell'app. -->
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>

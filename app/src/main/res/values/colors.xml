@@ -2,7 +2,7 @@
 <resources>
     <!-- Colori principali dell'app -->
     <color name="green_primary">#08BC57</color>
-    <color name="green_mind_primary">#08BC57</color>
+    
     <color name="green_dark">#00796B</color>
 
     <!-- Colori per la Home -->
