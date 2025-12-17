@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.greenmind.data.db.DBHelper;
-import com.example.greenmind.model.UserStats;
+import com.example.greenmind.resource.model.UserStats;
 
 public class UserStatsDao {
 

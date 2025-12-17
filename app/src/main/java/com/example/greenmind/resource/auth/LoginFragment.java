@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +21,7 @@ public class LoginFragment extends Fragment {
 
     private TextInputEditText emailEditText, passwordEditText;
     private Button loginButton;
-    private TextView forgotPasswordTextView;
+    private TextView forgotPasswordTextView; // NUOVA VARIABILE
 
     @Nullable
     @Override
@@ -34,26 +33,16 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Colleghiamo le variabili agli elementi del layout
         emailEditText = view.findViewById(R.id.emailEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
         loginButton = view.findViewById(R.id.loginButton);
         TextView registerTextView = view.findViewById(R.id.registerTextView);
-        forgotPasswordTextView = view.findViewById(R.id.forgotPasswordTextView);
+        forgotPasswordTextView = view.findViewById(R.id.forgotPasswordTextView); // NUOVO COLLEGAMENTO
 
-        // --- GESTIONE CLICK SU BOTTONE "ACCEDI" ---
+        // Impostiamo l'ascoltatore per il pulsante di login
         loginButton.setOnClickListener(v -> {
             handleLogin();
-        });
-
-        // --- NUOVO: GESTIONE TASTO "INVIO" SULLA TASTIERA ---
-        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
-            // Controlla se l'azione è "IME_ACTION_DONE" (il tasto Invio/Fatto)
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // Esegue la stessa logica del click sul bottone
-                handleLogin();
-                return true; // Indica che l'evento è stato gestito
-            }
-            return false; // Lascia che il sistema gestisca altri eventi
         });
 
         // Logica per andare a registrazione
@@ -62,32 +51,26 @@ public class LoginFragment extends Fragment {
                     .navigate(R.id.action_loginFragment_to_registerFragment);
         });
 
-        // Logica per andare a password dimenticata
+        // NUOVO: Logica per andare a password dimenticata
         forgotPasswordTextView.setOnClickListener(v -> {
             NavHostFragment.findNavController(LoginFragment.this)
                     .navigate(R.id.action_loginFragment_to_forgotPasswordFragment);
         });
     }
 
-    /**
-     * Gestisce la logica di login. Controlla i campi e, se validi,
-     * procede con il login.
-     */
     private void handleLogin() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
-        // VALIDAZIONE: Controlla se i campi sono vuoti
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            // Mostra un messaggio di errore all'utente
             Toast.makeText(getContext(), "Per favore, inserisci email e password", Toast.LENGTH_SHORT).show();
-            return; // Interrompe l'esecuzione del metodo
+            return;
         }
 
-        // Se la validazione è superata, mostra un messaggio di successo
-        // e naviga alla schermata successiva.
         Toast.makeText(getContext(), "Login effettuato con successo!", Toast.LENGTH_LONG).show();
 
+        // **SECONDA PARTE DELLA TUA RICHIESTA**
+        // Dopo un login corretto, navighiamo alla pagina dei quiz.
         NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_quizTestFragment);
     }
 }

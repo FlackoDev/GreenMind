@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    tools:context=".auth.RegisterFragment"> <!-- Cambieremo .auth.RegisterFragment dopo -->
+    tools:context=".resource.auth.RegisterFragment"> <!-- Cambieremo .auth.RegisterFragment dopo -->
 
     <!-- 1. Logo (identico a prima) -->
     <ImageView

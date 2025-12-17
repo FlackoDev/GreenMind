@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.greenmind.data.db.DBHelper;
-import com.example.greenmind.model.LearningContent;
+import com.example.greenmind.resource.model.LearningContent;
 
 import java.util.ArrayList;
 import java.util.List;

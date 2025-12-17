@@ -1,4 +1,4 @@
-package com.example.greenmind.model;
+package com.example.greenmind.resource.model;
 
 public class LeaderboardEntry {
     private long id;      // AUTOINCREMENT

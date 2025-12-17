@@ -1,4 +1,4 @@
-package com.example.greenmind.model;
+package com.example.greenmind.resource.model;
 
 public class User {
     private int id;

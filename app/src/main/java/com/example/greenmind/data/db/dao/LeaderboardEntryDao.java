@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.greenmind.data.db.DBHelper;
-import com.example.greenmind.model.LeaderboardEntry;
+import com.example.greenmind.resource.model.LeaderboardEntry;
 
 public class LeaderboardEntryDao {
 
