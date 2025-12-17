@@ -23,10 +23,11 @@
             </intent-filter>
         </activity>
 
-        <!-- DICHIARAZIONE MANCANTE DELLA HOME ACTIVITY -->
+        <!-- Home Activity -->
         <activity
             android:name=".resource.home.HomeActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/Theme.GreenMind" />
 
     </application>
 
