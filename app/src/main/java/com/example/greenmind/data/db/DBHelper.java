@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2; // Incrementato per aggiungere le colonne di sicurezza
 
     // ----- TABLE NAMES -----
     public static final String T_QUIZ = "Quiz";
@@ -46,10 +46,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 ");");
 
         db.execSQL("CREATE TABLE " + T_USER + " (" +
-                "id INTEGER PRIMARY KEY, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT NOT NULL, " +
                 "email TEXT NOT NULL UNIQUE, " +
-                "passwordHash TEXT NOT NULL" +
+                "passwordHash TEXT NOT NULL, " +
+                "failedAttempts INTEGER DEFAULT 0, " +
+                "lockoutUntil INTEGER DEFAULT 0" +
                 ");");
 
         db.execSQL("CREATE TABLE " + T_LEARNING_CONTENT + " (" +
@@ -86,7 +88,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 ");");
 
         // AnswerOption -> Question
-        // (Modello consigliato: la correttezza è per opzione, non per domanda)
         db.execSQL("CREATE TABLE " + T_ANSWER_OPTION + " (" +
                 "id INTEGER PRIMARY KEY, " +
                 "questionId INTEGER NOT NULL, " +
@@ -107,7 +108,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 ");");
 
         // QuizResult -> User, Quiz
-        // date: timestamp long (INTEGER)
         db.execSQL("CREATE TABLE " + T_QUIZ_RESULT + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "userId INTEGER NOT NULL, " +
@@ -146,19 +146,25 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop in ordine "figli -> padri" per evitare errori con FK
-        db.execSQL("DROP TABLE IF EXISTS " + T_LEADERBOARD);
-        db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ_RESULT);
-        db.execSQL("DROP TABLE IF EXISTS " + T_USER_STATS);
-        db.execSQL("DROP TABLE IF EXISTS " + T_ANSWER_OPTION);
-        db.execSQL("DROP TABLE IF EXISTS " + T_QUESTION);
+        if (oldVersion < 2) {
+            // Aggiunta colonne per protezione brute force
+            db.execSQL("ALTER TABLE " + T_USER + " ADD COLUMN failedAttempts INTEGER DEFAULT 0");
+            db.execSQL("ALTER TABLE " + T_USER + " ADD COLUMN lockoutUntil INTEGER DEFAULT 0");
+        } else {
+            // Drop in ordine "figli -> padri" per evitare errori con FK
+            db.execSQL("DROP TABLE IF EXISTS " + T_LEADERBOARD);
+            db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ_RESULT);
+            db.execSQL("DROP TABLE IF EXISTS " + T_USER_STATS);
+            db.execSQL("DROP TABLE IF EXISTS " + T_ANSWER_OPTION);
+            db.execSQL("DROP TABLE IF EXISTS " + T_QUESTION);
 
-        db.execSQL("DROP TABLE IF EXISTS " + T_LEVEL);
-        db.execSQL("DROP TABLE IF EXISTS " + T_BADGE);
-        db.execSQL("DROP TABLE IF EXISTS " + T_LEARNING_CONTENT);
-        db.execSQL("DROP TABLE IF EXISTS " + T_USER);
-        db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ);
+            db.execSQL("DROP TABLE IF EXISTS " + T_LEVEL);
+            db.execSQL("DROP TABLE IF EXISTS " + T_BADGE);
+            db.execSQL("DROP TABLE IF EXISTS " + T_LEARNING_CONTENT);
+            db.execSQL("DROP TABLE IF EXISTS " + T_USER);
+            db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ);
 
-        onCreate(db);
+            onCreate(db);
+        }
     }
 }

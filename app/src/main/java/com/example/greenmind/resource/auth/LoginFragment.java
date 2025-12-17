@@ -1,4 +1,4 @@
-package com.example.greenmind.resource.auth; // <-- UNICA MODIFICA NECESSARIA
+package com.example.greenmind.resource.auth;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,17 +15,23 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.greenmind.R;
+import com.example.greenmind.data.auth.SessionManager;
+import com.example.greenmind.data.db.dao.UserDao;
+import com.example.greenmind.resource.model.User;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginFragment extends Fragment {
 
     private TextInputEditText emailEditText, passwordEditText;
-    private Button loginButton;
-    private TextView forgotPasswordTextView; // NUOVA VARIABILE
+    private UserDao userDao;
+    private SessionManager sessionManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        userDao = new UserDao(requireContext());
+        sessionManager = new SessionManager(requireContext());
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
@@ -33,32 +39,37 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Colleghiamo le variabili agli elementi del layout
+        // COMMENTATO PER TEST: Login automatico disabilitato
+        /*
+        if (sessionManager.isLoggedIn()) {
+            navigateToHome();
+            return;
+        }
+        */
+
         emailEditText = view.findViewById(R.id.emailEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
-        loginButton = view.findViewById(R.id.loginButton);
+        Button loginButton = view.findViewById(R.id.loginButton);
         TextView registerTextView = view.findViewById(R.id.registerTextView);
-        forgotPasswordTextView = view.findViewById(R.id.forgotPasswordTextView); // NUOVO COLLEGAMENTO
+        TextView forgotPasswordTextView = view.findViewById(R.id.forgotPasswordTextView);
 
-        // Impostiamo l'ascoltatore per il pulsante di login
-        loginButton.setOnClickListener(v -> {
-            handleLogin();
-        });
+        loginButton.setOnClickListener(v -> handleLogin());
 
-        // Logica per andare a registrazione
-        registerTextView.setOnClickListener(v -> {
-            NavHostFragment.findNavController(LoginFragment.this)
-                    .navigate(R.id.action_loginFragment_to_registerFragment);
-        });
+        registerTextView.setOnClickListener(v -> NavHostFragment.findNavController(LoginFragment.this)
+                .navigate(R.id.action_loginFragment_to_registerFragment));
 
-        // NUOVO: Logica per andare a password dimenticata
-        forgotPasswordTextView.setOnClickListener(v -> {
-            NavHostFragment.findNavController(LoginFragment.this)
-                    .navigate(R.id.action_loginFragment_to_forgotPasswordFragment);
-        });
+        forgotPasswordTextView.setOnClickListener(v -> NavHostFragment.findNavController(LoginFragment.this)
+                .navigate(R.id.action_loginFragment_to_forgotPasswordFragment));
     }
 
     private void handleLogin() {
+        if (sessionManager.isGlobalLocked()) {
+            showLockoutDialog();
+            return;
+        }
+
+        if (emailEditText.getText() == null || passwordEditText.getText() == null) return;
+
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
@@ -67,9 +78,43 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        Toast.makeText(getContext(), "Login effettuato con successo!", Toast.LENGTH_LONG).show();
+        UserDao.AuthResult result = userDao.authenticate(email, password);
 
-        // Dopo un login corretto, navighiamo alla pagina home.
+        switch (result) {
+            case SUCCESS:
+                User user = userDao.getLastAuthenticatedUser();
+                sessionManager.createLoginSession(user.getId(), user.getName());
+                sessionManager.resetGlobalFailures();
+                Toast.makeText(getContext(), "Bentornato, " + user.getName() + "!", Toast.LENGTH_LONG).show();
+                navigateToHome();
+                break;
+
+            case LOCKED:
+                showLockoutDialog();
+                break;
+
+            case INVALID_CREDENTIALS:
+                sessionManager.incrementGlobalFailures();
+                if (sessionManager.isGlobalLocked()) {
+                    showLockoutDialog();
+                } else {
+                    Toast.makeText(getContext(), "Email o password non corretti.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    private void showLockoutDialog() {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Sicurezza GreenMind")
+                .setMessage("Abbiamo rilevato troppi tentativi di accesso non riusciti.\n\nPer proteggere i tuoi dati, l'accesso da questo dispositivo è stato temporaneamente bloccato per 15 minuti.")
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .setIcon(android.R.drawable.ic_lock_lock)
+                .setCancelable(false)
+                .show();
+    }
+
+    private void navigateToHome() {
         NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_homeActivity);
     }
 }

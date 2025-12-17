@@ -54,7 +54,14 @@
         android:id="@+id/forgotPasswordFragment"
         android:name="com.example.greenmind.resource.auth.ForgotPasswordFragment"
         android:label="ForgotPassword"
-        tools:layout="@layout/fragment_forgot_password" />
+        tools:layout="@layout/fragment_forgot_password">
+        <!-- AZIONE AGGIUNTA PER TORNARE AL LOGIN -->
+        <action
+            android:id="@+id/action_forgotPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <!-- Home Activity -->
     <activity

@@ -14,18 +14,20 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.greenmind.R;
+import com.example.greenmind.data.db.dao.UserDao;
 import com.example.greenmind.databinding.FragmentRegisterBinding;
+import com.example.greenmind.utils.SecurityUtils;
 
 public class RegisterFragment extends Fragment {
 
-    // Usa ViewBinding per evitare errori con findViewById
     private FragmentRegisterBinding binding;
+    private UserDao userDao;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Carica il layout usando ViewBinding
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
+        userDao = new UserDao(requireContext());
         return binding.getRoot();
     }
 
@@ -33,18 +35,13 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Imposta l'ascoltatore per il pulsante di registrazione
-        binding.registerButton.setOnClickListener(v -> {
-            handleRegistration();
-        });
+        binding.registerButton.setOnClickListener(v -> handleRegistration());
 
-        // Imposta l'ascoltatore per il testo "Accedi"
         binding.loginTextView.setOnClickListener(v -> {
             NavHostFragment.findNavController(RegisterFragment.this)
                     .navigate(R.id.action_registerFragment_to_loginFragment);
         });
 
-        // Imposta l'ascoltatore per il tasto "Invio" sulla password
         binding.passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 handleRegistration();
@@ -59,21 +56,52 @@ public class RegisterFragment extends Fragment {
         String email = binding.emailEditText.getText().toString().trim();
         String password = binding.passwordEditText.getText().toString().trim();
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(getContext(), "Per favore, compila tutti i campi", Toast.LENGTH_SHORT).show();
+        // 1. Controllo campi vuoti
+        if (TextUtils.isEmpty(name)) {
+            binding.nameEditText.setError("Inserisci il tuo nome");
             return;
         }
 
-        Toast.makeText(getContext(), "Registrazione per " + name + " completata!", Toast.LENGTH_LONG).show();
+        // 2. Validazione Email
+        if (!SecurityUtils.isValidEmail(email)) {
+            binding.emailEditText.setError("Inserisci un'email valida");
+            return;
+        }
 
-        // Naviga alla schermata di login dopo la registrazione
-        NavHostFragment.findNavController(this).navigate(R.id.action_registerFragment_to_loginFragment);
+        // 3. Validazione Password (Robustezza) - COMMENTATA PER SVILUPPO
+        /*
+        if (!SecurityUtils.isValidPassword(password)) {
+            binding.passwordEditText.setError("La password deve avere almeno 8 caratteri, una maiuscola, un numero e un simbolo");
+            Toast.makeText(getContext(), "Password troppo debole", Toast.LENGTH_LONG).show();
+            return;
+        }
+        */
+        
+        // Controllo minimo per non avere password vuote
+        if (TextUtils.isEmpty(password)) {
+            binding.passwordEditText.setError("Inserisci una password");
+            return;
+        }
+
+        // 4. Controllo se l'utente esiste già
+        if (userDao.getByEmail(email) != null) {
+            binding.emailEditText.setError("Questa email è già registrata");
+            return;
+        }
+
+        long id = userDao.registerUser(name, email, password);
+
+        if (id > 0) {
+            Toast.makeText(getContext(), "Registrazione completata con successo!", Toast.LENGTH_LONG).show();
+            NavHostFragment.findNavController(this).navigate(R.id.action_registerFragment_to_loginFragment);
+        } else {
+            Toast.makeText(getContext(), "Errore tecnico durante la registrazione", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Pulisce il riferimento al binding per evitare memory leak
         binding = null;
     }
 }

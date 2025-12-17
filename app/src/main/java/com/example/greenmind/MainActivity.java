@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // 1. INSTALLIAMO LA SPLASH SCREEN (DEVE ESSERE LA PRIMA COSA)
+        // 1. INSTALLIAMO LA SPLASH SCREEN
         SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
@@ -32,35 +32,16 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // LA RIGA MANCANTE CHE CAUSAVA IL CRASH
+        // Impostiamo la toolbar (ora sarà sempre visibile e verde)
         setSupportActionBar(binding.toolbar);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        // 2. CONFIGURAZIONE CORRETTA PER RIMUOVERE LA FRECCIA INDIETRO
-        appBarConfiguration = new AppBarConfiguration.Builder(R.id.loginFragment).build();
+        
+        // CONFIGURAZIONE PER AVERE LA FRECCIA INDIETRO
+        // Mettiamo solo lo Splash come destinazione "top-level". 
+        // In questo modo il Login e le altre avranno la freccina per tornare indietro.
+        appBarConfiguration = new AppBarConfiguration.Builder(R.id.splashFragment).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
