@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Colori principali dell'app -->
-    <color name="green_primary">#00C853</color> <!-- Un verde brillante per i pulsanti -->    <color name="green_dark">#00796B</color>   <!-- Un verde più scuro per i testi/link -->
+    <color name="green_primary">#08BC57</color>
+    <color name="green_dark">#00796B</color>
 
-    <!-- Colori standard che sono sempre utili -->
-    <color name="black">#FF000000</color>
+    <!-- Colori per la Home -->
+    <color name="green_accent">#08BC57</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="weather_alert_background">#FDF1EE</color>
+    <color name="weather_alert_text">#D32F2F</color>
+    <color name="weather_alert_icon">#F44336</color>
+    <color name="quick_action_stroke">#E0E0E0</color>
+    <color name="quick_quiz_icon">#448AFF</color>
+    <color name="read_article_icon">#FF9100</color>
+    <color name="trophy_yellow">#FFD600</color>
+
+    <!-- Colori per Effetti UI -->
+    <color name="ripple_effect">#40FFFFFF</color> <!-- Bianco con 25% di opacità -->
+    <color name="ripple_dark">#40000000</color> <!-- Nero con 25% di opacità -->
+
+    <!-- Colori standard -->
+    <color name="transparent">#00000000</color>
+
 </resources>
