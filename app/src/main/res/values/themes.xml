@@ -11,11 +11,16 @@
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <!-- Imposta il colore di sfondo della splash screen. -->
         <item name="windowSplashScreenBackground">@color/green_primary</item>
-        
+
         <!-- Imposta l'icona al centro. Useremo l'icona di avvio dell'app. -->
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
-        
+
         <!-- Imposta il tema da usare dopo la splash screen, per una transizione fluida. -->
         <item name="postSplashScreenTheme">@style/Theme.GreenMind</item>
     </style>
+
+    <!-- Stili per l'AppBar (richiesti dal nuovo activity_main.xml) -->
+    <style name="Theme.GreenMind.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.GreenMind.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

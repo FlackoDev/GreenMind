@@ -11,6 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting">
+
+        <!-- Activity Principale con i Fragment -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -20,6 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- DICHIARAZIONE MANCANTE DELLA HOME ACTIVITY -->
+        <activity
+            android:name=".resource.home.HomeActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

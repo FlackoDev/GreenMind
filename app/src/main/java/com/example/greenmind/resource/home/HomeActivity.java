@@ -1,29 +1,24 @@
 package com.example.greenmind.resource.home;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import com.example.greenmind.databinding.ActivityHomeBinding;
 
-import com.example.greenmind.R;
+public class HomeActivity extends AppCompatActivity { // <-- CORRETTO: Estende AppCompatActivity
 
-public class HomeActivity extends Fragment {
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_home, container, false);
-    }
+    private ActivityHomeBinding binding;
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        // Qui puoi aggiungere il codice per interagire con gli elementi del tuo layout,
-        // come i bottoni o le viste di testo.
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Usa ViewBinding per caricare il layout, come nel resto del progetto
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // Ora il tuo layout `activity_home.xml` è correttamente mostrato.
+        // Da qui in poi puoi aggiungere la logica per i tuoi bottoni e viste.
+        // Esempio: binding.buttonAcceptChallenge.setOnClickListener(...);
     }
 }

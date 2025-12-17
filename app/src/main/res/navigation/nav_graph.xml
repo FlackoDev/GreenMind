@@ -5,13 +5,12 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/splashFragment">
 
-    <!-- NUOVO: Aggiunto lo SplashFragment -->
+    <!-- Splash Fragment -->
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.greenmind.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
-        <!-- NUOVO: Azione per navigare da Splash a Login -->
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
             app:destination="@id/loginFragment"
@@ -19,45 +18,49 @@
             app:popUpToInclusive="true" />
     </fragment>
 
-    <!-- I tuoi fragment esistenti sono stati mantenuti e non modificati -->
+    <!-- Login Fragment -->
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.greenmind.resource.auth.LoginFragment"
         android:label="Login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
+        <!-- AZIONE CORRETTA PER ANDARE ALLA HOME -->
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
+            android:id="@+id/action_loginFragment_to_homeActivity"
+            app:destination="@id/homeActivity"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
 
+    <!-- Register Fragment -->
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.greenmind.resource.auth.RegisterFragment"
         android:label="Register"
-        tools:layout="@layout/fragment_register" >
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
 
+    <!-- ForgotPassword Fragment -->
     <fragment
         android:id="@+id/forgotPasswordFragment"
         android:name="com.example.greenmind.resource.auth.ForgotPasswordFragment"
         android:label="ForgotPassword"
         tools:layout="@layout/fragment_forgot_password" />
 
-    <fragment
-        android:id="@+id/homeFragment"
+    <!-- Home Activity -->
+    <activity
+        android:id="@+id/homeActivity"
         android:name="com.example.greenmind.resource.home.HomeActivity"
-        android:label="Home"
+        android:label="activity_home"
         tools:layout="@layout/activity_home" />
 
 </navigation>

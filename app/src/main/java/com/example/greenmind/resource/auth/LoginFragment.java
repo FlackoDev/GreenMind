@@ -1,4 +1,4 @@
-package com.example.greenmind.auth;
+package com.example.greenmind.resource.auth; // <-- UNICA MODIFICA NECESSARIA
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -68,7 +68,8 @@ public class LoginFragment extends Fragment {
         }
 
         Toast.makeText(getContext(), "Login effettuato con successo!", Toast.LENGTH_LONG).show();
-        
 
+        // Dopo un login corretto, navighiamo alla pagina home.
+        NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_homeActivity);
     }
 }

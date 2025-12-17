@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 
+import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -23,15 +24,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 1. INSTALLIAMO LA SPLASH SCREEN (DEVE ESSERE LA PRIMA COSA)
+        SplashScreen.installSplashScreen(this);
+
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
+        // LA RIGA MANCANTE CHE CAUSAVA IL CRASH
+        setSupportActionBar(binding.toolbar);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        // 2. CONFIGURAZIONE CORRETTA PER RIMUOVERE LA FRECCIA INDIETRO
+        appBarConfiguration = new AppBarConfiguration.Builder(R.id.loginFragment).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     }
 
