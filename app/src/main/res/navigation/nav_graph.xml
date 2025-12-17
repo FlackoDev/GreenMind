@@ -3,8 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashFragment">
 
+    <!-- NUOVO: Aggiunto lo SplashFragment -->
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.greenmind.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <!-- NUOVO: Azione per navigare da Splash a Login -->
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- I tuoi fragment esistenti sono stati mantenuti e non modificati -->
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.greenmind.auth.LoginFragment"
@@ -16,7 +31,6 @@
         <action
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
-        <!-- NUOVA AZIONE DIRETTA: Da Login a Quiz -->
         <action
             android:id="@+id/action_loginFragment_to_quizTestFragment"
             app:destination="@id/quizTestFragment" />

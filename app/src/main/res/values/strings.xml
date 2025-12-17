@@ -7,6 +7,8 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="quiz">Quiz</string>
+    <string name="splash_title">GreenMind</string>
+    <string name="splash_subtitle">Il pianeta conta su di te</string>
     <string name="password_dimenticata">Password dimenticata?</string>
 
     <string name="lorem_ipsum">

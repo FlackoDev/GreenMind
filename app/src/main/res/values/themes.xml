@@ -6,4 +6,16 @@
     </style>
 
     <style name="Theme.GreenMind" parent="Base.Theme.GreenMind" />
+
+    <!-- Splash Screen Theme -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Imposta il colore di sfondo della splash screen. -->
+        <item name="windowSplashScreenBackground">@color/green_mind_primary</item>
+        
+        <!-- Imposta l'icona al centro. Useremo l'icona di avvio dell'app. -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        
+        <!-- Imposta il tema da usare dopo la splash screen, per una transizione fluida. -->
+        <item name="postSplashScreenTheme">@style/Theme.GreenMind</item>
+    </style>
 </resources>

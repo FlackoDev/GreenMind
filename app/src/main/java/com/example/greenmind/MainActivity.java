@@ -15,6 +15,7 @@ import com.example.greenmind.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.core.splashscreen.SplashScreen;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -31,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        // MODIFICA: Aggiunto R.id.loginFragment come destinazione di primo livello
+        appBarConfiguration = new AppBarConfiguration.Builder(R.id.loginFragment).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     }
 
