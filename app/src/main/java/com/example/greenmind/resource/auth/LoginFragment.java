@@ -68,9 +68,7 @@ public class LoginFragment extends Fragment {
         }
 
         Toast.makeText(getContext(), "Login effettuato con successo!", Toast.LENGTH_LONG).show();
+        
 
-        // **SECONDA PARTE DELLA TUA RICHIESTA**
-        // Dopo un login corretto, navighiamo alla pagina dei quiz.
-        NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_quizTestFragment);
     }
 }
