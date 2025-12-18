@@ -5,22 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    tools:context=".resource.auth.RegisterFragment"> <!-- Cambieremo .auth.RegisterFragment dopo -->
+    tools:context=".resource.auth.RegisterFragment">
 
-    <!-- 1. Logo (identico a prima) -->
-    <ImageView
-        android:id="@+id/logoImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <!-- 1. Logo con sfondo smussato ed elevazione -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/logoContainer"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="32dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/logo1"
+        app:cardBackgroundColor="@color/green_lightest"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- 2. Titolo principale (modificato) -->
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo1"
+            tools:srcCompat="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- 2. Titolo principale -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
@@ -32,9 +42,9 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoImageView" />
+        app:layout_constraintTop_toBottomOf="@id/logoContainer" />
 
-    <!-- 3. Sottotitolo (modificato) -->
+    <!-- 3. Sottotitolo -->
     <TextView
         android:id="@+id/subtitleTextView"
         android:layout_width="wrap_content"
@@ -46,14 +56,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
-    <!-- 4. NUOVO: Campo di input per Nome e Cognome -->
+    <!-- 4. Campo di input per Nome e Cognome -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameTextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:hint="Nome e Cognome"
+        app:boxBackgroundColor="#F3F3F3"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtitleTextView"
@@ -67,14 +84,21 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 5. Campo di input per l'Email (la sua posizione è cambiata) -->
+    <!-- 5. Campo di input per l'Email -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailTextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Email"
+        app:boxBackgroundColor="#F3F3F3"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameTextInputLayout"
@@ -88,17 +112,25 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 6. Campo di input per la Password (la sua posizione è cambiata) -->
+    <!-- 6. Campo di input per la Password -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordTextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/password"
+        app:boxBackgroundColor="#F3F3F3"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailTextInputLayout"
+        app:passwordToggleEnabled="true"
         app:startIconDrawable="@drawable/ic_password">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -110,7 +142,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 7. Pulsante "Registrati" (modificato) -->
+    <!-- 7. Pulsante "Registrati" -->
     <Button
         android:id="@+id/registerButton"
         android:layout_width="0dp"
@@ -123,7 +155,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordTextInputLayout" />
 
-    <!-- 8. Sezione per il login (modificata) -->
+    <!-- 8. Sezione per il login -->
     <LinearLayout
         android:id="@+id/loginSection"
         android:layout_width="wrap_content"

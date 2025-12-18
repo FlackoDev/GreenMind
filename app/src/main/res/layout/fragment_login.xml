@@ -7,18 +7,28 @@
     android:padding="24dp"
     tools:context=".resource.auth.LoginFragment">
 
-    <!-- 1. Logo dell'applicazione -->
-    <ImageView
-        android:id="@+id/logoImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <!-- 1. Logo dell'applicazione con sfondo smussato ed elevazione -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/logoContainer"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="32dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/logo1"
+        app:cardBackgroundColor="@color/green_lightest"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" /> <!-- Uso un'icona di placeholder -->
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo1"
+            tools:srcCompat="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
 
     <!-- 2. Titolo principale -->
     <TextView
@@ -32,7 +42,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoImageView" />
+        app:layout_constraintTop_toBottomOf="@id/logoContainer" />
 
     <!-- 3. Sottotitolo -->
     <TextView
@@ -49,11 +59,18 @@
     <!-- 4. Campo di input per l'Email -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailTextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:hint="Email"
+        app:boxBackgroundColor="#F3F3F3"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtitleTextView"
@@ -70,29 +87,38 @@
     <!-- 5. Campo di input per la Password -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordTextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Password"
+        app:boxBackgroundColor="#F3F3F3"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailTextInputLayout"
-        app:startIconDrawable="@drawable/ic_password" > <!-- QUI inserirai l'icona quando l'avrai -->
+        app:passwordToggleEnabled="true"
+        app:startIconDrawable="@drawable/ic_password">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionDone"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Testo per password dimenticata -->
     <TextView
         android:id="@+id/forgotPasswordTextView"
-        android:layout_width="wrap_content"        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/password_dimenticata"
         android:textColor="@color/green_dark"

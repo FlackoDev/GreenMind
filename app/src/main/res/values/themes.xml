@@ -1,29 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.GreenMind" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Colori principali forzati per evitare il viola di default -->
-        <item name="colorPrimary">@color/green_primary</item>
-        <item name="colorPrimaryVariant">@color/green_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondario -->
-        <item name="colorSecondary">@color/green_primary</item>
-        <item name="colorOnSecondary">@color/white</item>
-        
-        <!-- Imposta il colore della barra di stato (quella con l'ora) -->
-        <item name="android:statusBarColor">@color/white</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:colorBackground">@color/white</item>
     </style>
 
-    <style name="Theme.GreenMind" parent="Base.Theme.GreenMind" />
+    <style name="Theme.GreenMind" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/green_primary</item>
+
+    </style>
 
     <!-- Splash Screen Theme -->
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/green_primary</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <item name="windowSplashScreenBackground">@color/transparent</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/prova</item>
+        <item name="windowSplashScreenAnimationDuration">0</item>
         <item name="postSplashScreenTheme">@style/Theme.GreenMind</item>
     </style>
 
-    <!-- Stili per l'AppBar -->
+    <!-- Stili per l'AppBar (richiesti dal nuovo activity_main.xml) -->
     <style name="Theme.GreenMind.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.GreenMind.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 

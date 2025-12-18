@@ -29,6 +29,19 @@
             android:exported="true"
             android:theme="@style/Theme.GreenMind" />
 
+        <activity
+            android:name=".resource.learn.LearnActivity"
+            android:theme="@style/Theme.GreenMind" />
+        <activity
+            android:name=".resource.quiz.QuizActivity"
+            android:theme="@style/Theme.GreenMind" />
+        <activity
+            android:name=".resource.classifica.ClassificaActivity"
+            android:theme="@style/Theme.GreenMind" />
+        <activity
+            android:name=".resource.profilo.ProfiloActivity"
+            android:theme="@style/Theme.GreenMind" />
+
     </application>
 
 </manifest>

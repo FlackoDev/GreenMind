@@ -56,6 +56,10 @@ public class SessionManager {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
+    public String getUserName() {
+        return sharedPreferences.getString(KEY_USER_NAME, "Utente");
+    }
+
     public void logout() {
         editor.clear();
         editor.apply();

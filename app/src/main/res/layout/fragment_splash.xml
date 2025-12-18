@@ -5,32 +5,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/green_primary"
+    android:theme="@style/Theme.GreenMind"
     tools:context=".SplashFragment">
 
-    <ImageView
-        android:id="@+id/logo_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo1"
+    <!-- Logo con sfondo bianco smussato ed elevazione (shadow) -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/logoContainer"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toTopOf="@+id/title_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <ImageView
+            android:id="@+id/logo_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo1" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/splash_title"
         android:textColor="@color/white"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/subtitle_text"
-        app:layout_constraintEnd_toEndOf="@+id/logo_image"
-        app:layout_constraintStart_toStartOf="@+id/logo_image"
-        app:layout_constraintTop_toBottomOf="@+id/logo_image" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoContainer" />
 
     <TextView
         android:id="@+id/subtitle_text"
