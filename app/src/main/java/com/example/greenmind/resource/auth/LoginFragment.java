@@ -1,5 +1,6 @@
 package com.example.greenmind.resource.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.greenmind.R;
 import com.example.greenmind.data.auth.SessionManager;
 import com.example.greenmind.data.db.dao.UserDao;
+import com.example.greenmind.resource.home.HomeActivity;
 import com.example.greenmind.resource.model.User;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -39,13 +41,11 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // COMMENTATO PER TEST: Login automatico disabilitato
-        /*
+        // Se già loggato, vai alla home direttamente
         if (sessionManager.isLoggedIn()) {
             navigateToHome();
             return;
         }
-        */
 
         emailEditText = view.findViewById(R.id.emailEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
@@ -83,8 +83,11 @@ public class LoginFragment extends Fragment {
         switch (result) {
             case SUCCESS:
                 User user = userDao.getLastAuthenticatedUser();
-                sessionManager.createLoginSession(user.getId(), user.getName());
+                // Pulizia sessione precedente prima di crearne una nuova
+                sessionManager.logout(); 
+                sessionManager.createLoginSession(user.getId(), user.getName(), user.getEmail());
                 sessionManager.resetGlobalFailures();
+                
                 Toast.makeText(getContext(), "Bentornato, " + user.getName() + "!", Toast.LENGTH_LONG).show();
                 navigateToHome();
                 break;
@@ -115,6 +118,10 @@ public class LoginFragment extends Fragment {
     }
 
     private void navigateToHome() {
-        NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_homeActivity);
+        // Usiamo un Intent con flag per pulire lo stack ed evitare di poter tornare indietro al login
+        Intent intent = new Intent(requireContext(), HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        requireActivity().finish();
     }
 }

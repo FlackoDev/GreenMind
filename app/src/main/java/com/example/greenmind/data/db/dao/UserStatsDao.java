@@ -2,6 +2,7 @@ package com.example.greenmind.data.db.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.greenmind.data.db.DBHelper;
@@ -29,5 +30,23 @@ public class UserStatsDao {
                 cv,
                 SQLiteDatabase.CONFLICT_REPLACE
         );
+    }
+
+    public UserStats getStatsByUserId(int userId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c = db.query(DBHelper.T_USER_STATS, null, "userId=?", new String[]{String.valueOf(userId)}, null, null, null);
+        
+        if (c != null && c.moveToFirst()) {
+            UserStats s = new UserStats(
+                    c.getInt(c.getColumnIndexOrThrow("userId")),
+                    c.getInt(c.getColumnIndexOrThrow("totalQuizzes")),
+                    c.getInt(c.getColumnIndexOrThrow("totalPoints")),
+                    c.getFloat(c.getColumnIndexOrThrow("weeklyChangePerc"))
+            );
+            c.close();
+            return s;
+        }
+        if (c != null) c.close();
+        return new UserStats(userId, 0, 0, 0);
     }
 }

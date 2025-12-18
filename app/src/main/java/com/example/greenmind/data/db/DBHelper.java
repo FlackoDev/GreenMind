@@ -1,13 +1,15 @@
 package com.example.greenmind.data.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 2; // Incrementato per aggiungere le colonne di sicurezza
+    public static final int DB_VERSION = 6;
 
     // ----- TABLE NAMES -----
     public static final String T_QUIZ = "Quiz";
@@ -25,19 +27,15 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    /** Abilita realmente le FK su Android */
     @Override
     public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
-        db.setForeignKeyConstraintsEnabled(true); // API 16+
+        db.setForeignKeyConstraintsEnabled(true);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        // =========================
-        // 1) TABLES "PARENT" / STATIC
-        // =========================
+        // Parent tables
         db.execSQL("CREATE TABLE " + T_QUIZ + " (" +
                 "id INTEGER PRIMARY KEY, " +
                 "title TEXT NOT NULL, " +
@@ -51,7 +49,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "email TEXT NOT NULL UNIQUE, " +
                 "passwordHash TEXT NOT NULL, " +
                 "failedAttempts INTEGER DEFAULT 0, " +
-                "lockoutUntil INTEGER DEFAULT 0" +
+                "lockoutUntil INTEGER DEFAULT 0, " +
+                "createdAt INTEGER DEFAULT 0" +
                 ");");
 
         db.execSQL("CREATE TABLE " + T_LEARNING_CONTENT + " (" +
@@ -74,97 +73,112 @@ public class DBHelper extends SQLiteOpenHelper {
                 "requiredPoints INTEGER NOT NULL DEFAULT 0" +
                 ");");
 
-        // =========================
-        // 2) CHILD TABLES (FK)
-        // =========================
-
-        // Question -> Quiz
+        // Child tables
         db.execSQL("CREATE TABLE " + T_QUESTION + " (" +
                 "id INTEGER PRIMARY KEY, " +
                 "quizId INTEGER NOT NULL, " +
                 "text TEXT NOT NULL, " +
-                "FOREIGN KEY(quizId) REFERENCES " + T_QUIZ + "(id) " +
-                "ON UPDATE CASCADE ON DELETE CASCADE" +
+                "FOREIGN KEY(quizId) REFERENCES " + T_QUIZ + "(id) ON UPDATE CASCADE ON DELETE CASCADE" +
                 ");");
 
-        // AnswerOption -> Question
         db.execSQL("CREATE TABLE " + T_ANSWER_OPTION + " (" +
                 "id INTEGER PRIMARY KEY, " +
                 "questionId INTEGER NOT NULL, " +
                 "text TEXT NOT NULL, " +
                 "isCorrect INTEGER NOT NULL DEFAULT 0, " +
-                "FOREIGN KEY(questionId) REFERENCES " + T_QUESTION + "(id) " +
-                "ON UPDATE CASCADE ON DELETE CASCADE" +
+                "FOREIGN KEY(questionId) REFERENCES " + T_QUESTION + "(id) ON UPDATE CASCADE ON DELETE CASCADE" +
                 ");");
 
-        // UserStats (1-1) -> User
         db.execSQL("CREATE TABLE " + T_USER_STATS + " (" +
                 "userId INTEGER PRIMARY KEY, " +
                 "totalQuizzes INTEGER NOT NULL DEFAULT 0, " +
                 "totalPoints INTEGER NOT NULL DEFAULT 0, " +
                 "weeklyChangePerc REAL NOT NULL DEFAULT 0, " +
-                "FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) " +
-                "ON UPDATE CASCADE ON DELETE CASCADE" +
+                "FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) ON UPDATE CASCADE ON DELETE CASCADE" +
                 ");");
 
-        // QuizResult -> User, Quiz
         db.execSQL("CREATE TABLE " + T_QUIZ_RESULT + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "userId INTEGER NOT NULL, " +
                 "quizId INTEGER NOT NULL, " +
                 "score INTEGER NOT NULL DEFAULT 0, " +
                 "date INTEGER NOT NULL, " +
-                "FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) " +
-                "ON UPDATE CASCADE ON DELETE CASCADE, " +
-                "FOREIGN KEY(quizId) REFERENCES " + T_QUIZ + "(id) " +
-                "ON UPDATE CASCADE ON DELETE CASCADE" +
+                "FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) ON UPDATE CASCADE ON DELETE CASCADE, " +
+                "FOREIGN KEY(quizId) REFERENCES " + T_QUIZ + "(id) ON UPDATE CASCADE ON DELETE CASCADE" +
                 ");");
 
-        // LeaderboardEntry -> User
         db.execSQL("CREATE TABLE " + T_LEADERBOARD + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "userId INTEGER NOT NULL, " +
                 "points INTEGER NOT NULL DEFAULT 0, " +
                 "position INTEGER NOT NULL DEFAULT 0, " +
-                "FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) " +
-                "ON UPDATE CASCADE ON DELETE CASCADE" +
+                "FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) ON UPDATE CASCADE ON DELETE CASCADE" +
                 ");");
 
-        // =========================
-        // 3) INDEXES (FK + query speed)
-        // =========================
+        // Indexes
         db.execSQL("CREATE INDEX idx_question_quizId ON " + T_QUESTION + "(quizId);");
         db.execSQL("CREATE INDEX idx_answeroption_questionId ON " + T_ANSWER_OPTION + "(questionId);");
-
         db.execSQL("CREATE INDEX idx_quizresult_userId ON " + T_QUIZ_RESULT + "(userId);");
-        db.execSQL("CREATE INDEX idx_quizresult_quizId ON " + T_QUIZ_RESULT + "(quizId);");
-
-        db.execSQL("CREATE INDEX idx_leaderboard_userId ON " + T_LEADERBOARD + "(userId);");
-        db.execSQL("CREATE INDEX idx_learning_category ON " + T_LEARNING_CONTENT + "(category);");
         db.execSQL("CREATE INDEX idx_quiz_category ON " + T_QUIZ + "(category);");
+
+        // Popolamento dati iniziali
+        insertSampleData(db);
+    }
+
+    private void insertSampleData(SQLiteDatabase db) {
+        // 1. 10 Badge di esempio
+        db.execSQL("INSERT INTO " + T_BADGE + " (id, name, description, requiredPoints) VALUES " +
+                "(1, 'GREEN SCOUT', 'Primi passi verso la sostenibilità', 100), " +
+                "(2, 'NATURE LOVER', 'Appassionato della biodiversità', 250), " +
+                "(3, 'ECO WARRIOR', 'Guerriero per un mondo più pulito', 500), " +
+                "(4, 'EARTH SAVER', 'Protettore attivo del pianeta', 750), " +
+                "(5, 'RECYCLE MASTER', 'Maestro del riciclo creativo', 1000), " +
+                "(6, 'SUSTAINABILITY HERO', 'Eroe della vita sostenibile', 1500), " +
+                "(7, 'CLIMATE GUARDIAN', 'Custode del clima globale', 2000), " +
+                "(8, 'FOREST PROTECTOR', 'Difensore dei polmoni verdi', 3000), " +
+                "(9, 'OCEAN DEFENDER', 'Protettore delle acque e dei mari', 4000), " +
+                "(10, 'PLANET CHAMPION', 'Campione assoluto della Terra', 5000);");
+
+        // 2. Utenti di esempio (password: password123)
+        String hashedPw = BCrypt.hashpw("password123", BCrypt.gensalt());
+        long now = System.currentTimeMillis();
+
+        ContentValues user1 = new ContentValues();
+        user1.put("name", "Ale");
+        user1.put("email", "ale@gmail.com");
+        user1.put("passwordHash", hashedPw);
+        user1.put("createdAt", now);
+        long u1Id = db.insert(T_USER, null, user1);
+
+        ContentValues user2 = new ContentValues();
+        user2.put("name", "Rachele");
+        user2.put("email", "rachele@gmail.com");
+        user2.put("passwordHash", hashedPw);
+        user2.put("createdAt", now);
+        long u2Id = db.insert(T_USER, null, user2);
+
+        // 3. Statistiche per gli utenti
+        if (u1Id != -1) {
+            db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (" + u1Id + ", 42, 1250, 12.5);");
+        }
+        if (u2Id != -1) {
+            db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (" + u2Id + ", 15, 450, -2.0);");
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            // Aggiunta colonne per protezione brute force
-            db.execSQL("ALTER TABLE " + T_USER + " ADD COLUMN failedAttempts INTEGER DEFAULT 0");
-            db.execSQL("ALTER TABLE " + T_USER + " ADD COLUMN lockoutUntil INTEGER DEFAULT 0");
-        } else {
-            // Drop in ordine "figli -> padri" per evitare errori con FK
-            db.execSQL("DROP TABLE IF EXISTS " + T_LEADERBOARD);
-            db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ_RESULT);
-            db.execSQL("DROP TABLE IF EXISTS " + T_USER_STATS);
-            db.execSQL("DROP TABLE IF EXISTS " + T_ANSWER_OPTION);
-            db.execSQL("DROP TABLE IF EXISTS " + T_QUESTION);
-
-            db.execSQL("DROP TABLE IF EXISTS " + T_LEVEL);
-            db.execSQL("DROP TABLE IF EXISTS " + T_BADGE);
-            db.execSQL("DROP TABLE IF EXISTS " + T_LEARNING_CONTENT);
-            db.execSQL("DROP TABLE IF EXISTS " + T_USER);
-            db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ);
-
-            onCreate(db);
-        }
+        // Reset totale per sviluppo
+        db.execSQL("DROP TABLE IF EXISTS " + T_ANSWER_OPTION);
+        db.execSQL("DROP TABLE IF EXISTS " + T_QUESTION);
+        db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ_RESULT);
+        db.execSQL("DROP TABLE IF EXISTS " + T_USER_STATS);
+        db.execSQL("DROP TABLE IF EXISTS " + T_LEADERBOARD);
+        db.execSQL("DROP TABLE IF EXISTS " + T_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ);
+        db.execSQL("DROP TABLE IF EXISTS " + T_BADGE);
+        db.execSQL("DROP TABLE IF EXISTS " + T_LEARNING_CONTENT);
+        db.execSQL("DROP TABLE IF EXISTS " + T_LEVEL);
+        onCreate(db);
     }
 }

@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -25,6 +25,7 @@ public class ForgotPasswordFragment extends Fragment {
 
     private TextInputEditText emailEditText;
     private Button continueButton;
+    private ImageButton backButton;
     private UserDao userDao;
 
     @Nullable
@@ -40,8 +41,14 @@ public class ForgotPasswordFragment extends Fragment {
 
         emailEditText = view.findViewById(R.id.emailEditText);
         continueButton = view.findViewById(R.id.continueButton);
+        backButton = view.findViewById(R.id.backButton);
 
         continueButton.setOnClickListener(v -> handlePasswordReset());
+
+        // Torna indietro al Login
+        backButton.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).navigateUp();
+        });
     }
 
     private void handlePasswordReset() {
@@ -52,26 +59,20 @@ public class ForgotPasswordFragment extends Fragment {
             return;
         }
 
-        // Verifica se l'utente esiste (sempre per sicurezza, ma qui dobbiamo procedere)
         if (userDao.getByEmail(email) == null) {
-            // Per sicurezza non diciamo che non esiste, ma simuliamo comunque l'invio
             Toast.makeText(getContext(), "Se l'email è presente nei nostri sistemi, riceverai un codice.", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // Simulazione invio codice
         String verificationCode = generateVerificationCode();
         showVerificationDialog(email, verificationCode);
     }
 
     private String generateVerificationCode() {
-        // Genera un codice casuale a 6 cifre
         return String.format("%06d", new Random().nextInt(999999));
     }
 
     private void showVerificationDialog(String email, String code) {
-        // In una vera app, questo codice verrebbe inviato via email.
-        // Qui lo mostriamo in un popup per permettere lo sviluppo.
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Codice di Verifica")
                 .setMessage("Abbiamo simulato l'invio di un'email a " + email + ".\n\nIl tuo codice di verifica è: " + code)
@@ -82,7 +83,6 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     private void showResetPasswordDialog(String email) {
-        // Creiamo una view programmabile per il cambio password nel dialog
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
         TextInputEditText newPasswordEntry = dialogView.findViewById(R.id.newPasswordEditText);
 

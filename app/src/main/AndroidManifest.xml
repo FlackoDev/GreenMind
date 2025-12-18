@@ -41,6 +41,10 @@
         <activity
             android:name=".resource.profilo.ProfiloActivity"
             android:theme="@style/Theme.GreenMind" />
+        <activity
+            android:name=".resource.profilo.SettingsActivity"
+            android:theme="@style/Theme.GreenMind"
+            android:label="Impostazioni" />
 
     </application>
 

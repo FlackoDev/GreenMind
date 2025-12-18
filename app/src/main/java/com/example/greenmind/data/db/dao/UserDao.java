@@ -30,6 +30,7 @@ public class UserDao {
         cv.put("passwordHash", passwordHash);
         cv.put("failedAttempts", 0);
         cv.put("lockoutUntil", 0);
+        cv.put("createdAt", System.currentTimeMillis());
 
         return db.insert(DBHelper.T_USER, null, cv);
     }
@@ -62,6 +63,7 @@ public class UserDao {
         String hash = c.getString(c.getColumnIndexOrThrow("passwordHash"));
         int failedAttempts = c.getInt(c.getColumnIndexOrThrow("failedAttempts"));
         long lockoutUntil = c.getLong(c.getColumnIndexOrThrow("lockoutUntil"));
+        long createdAt = c.getLong(c.getColumnIndexOrThrow("createdAt"));
         c.close();
 
         long currentTime = System.currentTimeMillis();
@@ -72,7 +74,7 @@ public class UserDao {
 
         if (BCrypt.checkpw(password, hash)) {
             resetFailedAttempts(db, id);
-            lastAuthenticatedUser = new User(id, name, email, hash);
+            lastAuthenticatedUser = new User(id, name, email, hash, createdAt);
             return AuthResult.SUCCESS;
         } else {
             failedAttempts++;
@@ -89,16 +91,13 @@ public class UserDao {
         }
     }
 
-    /**
-     * Aggiorna la password di un utente esistente.
-     */
     public boolean updatePassword(String email, String newPassword) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String newHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
         
         ContentValues cv = new ContentValues();
         cv.put("passwordHash", newHash);
-        cv.put("failedAttempts", 0); // Reset tentativi al cambio password
+        cv.put("failedAttempts", 0);
         cv.put("lockoutUntil", 0);
         
         int rows = db.update(DBHelper.T_USER, cv, "email=?", new String[]{email});
@@ -121,7 +120,8 @@ public class UserDao {
                     c.getInt(c.getColumnIndexOrThrow("id")),
                     c.getString(c.getColumnIndexOrThrow("name")),
                     c.getString(c.getColumnIndexOrThrow("email")),
-                    c.getString(c.getColumnIndexOrThrow("passwordHash"))
+                    c.getString(c.getColumnIndexOrThrow("passwordHash")),
+                    c.getLong(c.getColumnIndexOrThrow("createdAt"))
             );
             c.close();
             return u;

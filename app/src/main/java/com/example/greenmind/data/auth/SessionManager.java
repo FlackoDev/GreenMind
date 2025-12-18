@@ -14,6 +14,7 @@ public class SessionManager {
     private static final String PREF_NAME = "secure_session";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_NAME = "user_name";
+    private static final String KEY_USER_EMAIL = "user_email";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     
     // Sicurezza Globale
@@ -44,10 +45,11 @@ public class SessionManager {
         }
     }
 
-    public void createLoginSession(int userId, String name) {
+    public void createLoginSession(int userId, String name, String email) {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.putInt(KEY_USER_ID, userId);
         editor.putString(KEY_USER_NAME, name);
+        editor.putString(KEY_USER_EMAIL, email);
         resetGlobalFailures();
         editor.apply();
     }
@@ -56,8 +58,16 @@ public class SessionManager {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
+    public int getUserId() {
+        return sharedPreferences.getInt(KEY_USER_ID, -1);
+    }
+
     public String getUserName() {
         return sharedPreferences.getString(KEY_USER_NAME, "Utente");
+    }
+
+    public String getUserEmail() {
+        return sharedPreferences.getString(KEY_USER_EMAIL, "");
     }
 
     public void logout() {

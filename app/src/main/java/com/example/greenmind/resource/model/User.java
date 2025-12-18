@@ -5,6 +5,7 @@ public class User {
     private String name;
     private String email;
     private String passwordHash;
+    private long createdAt;
 
     public User() {}
 
@@ -13,6 +14,14 @@ public class User {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
+    }
+
+    public User(int id, String name, String email, String passwordHash, long createdAt) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.createdAt = createdAt;
     }
 
     public int getId() { return id; }
@@ -26,4 +35,7 @@ public class User {
 
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    public long getCreatedAt() { return createdAt; }
+    public void setCreatedAt(long createdAt) { this.createdAt = createdAt; }
 }

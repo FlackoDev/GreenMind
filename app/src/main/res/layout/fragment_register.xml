@@ -7,30 +7,30 @@
     android:padding="24dp"
     tools:context=".resource.auth.RegisterFragment">
 
-    <!-- 1. Logo con sfondo smussato ed elevazione -->
+    <!-- Chain verticale per centrare tutto il blocco centrale -->
     <androidx.cardview.widget.CardView
         android:id="@+id/logoContainer"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="32dp"
         app:cardBackgroundColor="@color/green_lightest"
         app:cardCornerRadius="15dp"
         app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/titleTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <ImageView
             android:id="@+id/logoImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
+            android:padding="0dp"
             android:scaleType="fitCenter"
             android:src="@drawable/logo1"
             tools:srcCompat="@tools:sample/avatars" />
     </androidx.cardview.widget.CardView>
 
-    <!-- 2. Titolo principale -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
@@ -40,11 +40,11 @@
         android:textColor="@android:color/black"
         android:textSize="28sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/subtitleTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logoContainer" />
 
-    <!-- 3. Sottotitolo -->
     <TextView
         android:id="@+id/subtitleTextView"
         android:layout_width="wrap_content"
@@ -52,11 +52,11 @@
         android:layout_marginTop="8dp"
         android:text="Unisciti alla community di GreenMind."
         android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/nameTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
-    <!-- 4. Campo di input per Nome e Cognome -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
@@ -71,6 +71,7 @@
         app:boxCornerRadiusTopStart="15dp"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/emailTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtitleTextView"
@@ -84,7 +85,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 5. Campo di input per l'Email -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
@@ -99,6 +99,7 @@
         app:boxCornerRadiusTopStart="15dp"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/passwordTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameTextInputLayout"
@@ -112,7 +113,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 6. Campo di input per la Password -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
@@ -127,6 +127,7 @@
         app:boxCornerRadiusTopStart="15dp"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/registerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailTextInputLayout"
@@ -137,12 +138,11 @@
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:imeOptions="actionDone" />
+            android:imeOptions="actionDone"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 7. Pulsante "Registrati" -->
     <Button
         android:id="@+id/registerButton"
         android:layout_width="0dp"
@@ -151,16 +151,16 @@
         android:backgroundTint="@color/green_primary"
         android:text="@string/registrati"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/loginSection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordTextInputLayout" />
 
-    <!-- 8. Sezione per il login -->
     <LinearLayout
         android:id="@+id/loginSection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -183,4 +183,5 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
