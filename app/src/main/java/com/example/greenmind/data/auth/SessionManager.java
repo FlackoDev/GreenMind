@@ -8,6 +8,9 @@ import androidx.security.crypto.MasterKeys;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class SessionManager {
 
@@ -22,6 +25,11 @@ public class SessionManager {
     private static final String KEY_GLOBAL_LOCKOUT_UNTIL = "global_lockout_until";
     private static final int MAX_GLOBAL_ATTEMPTS = 5;
     private static final long LOCKOUT_DURATION_MS = 15 * 60 * 1000;
+
+    // --- AI Usage Limits ---
+    private static final String KEY_AI_USAGE_COUNT = "ai_usage_count";
+    private static final String KEY_AI_LAST_USAGE_DATE = "ai_last_usage_date";
+    public static final int MAX_DAILY_AI_MESSAGES = 10;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -73,6 +81,32 @@ public class SessionManager {
     public void logout() {
         editor.clear();
         editor.apply();
+    }
+
+    // --- Gestione AI Limits ---
+
+    public int getRemainingAiMessages() {
+        checkAndResetDailyUsage();
+        int used = sharedPreferences.getInt(KEY_AI_USAGE_COUNT, 0);
+        return Math.max(0, MAX_DAILY_AI_MESSAGES - used);
+    }
+
+    public void incrementAiUsage() {
+        checkAndResetDailyUsage();
+        int current = sharedPreferences.getInt(KEY_AI_USAGE_COUNT, 0);
+        editor.putInt(KEY_AI_USAGE_COUNT, current + 1);
+        editor.apply();
+    }
+
+    private void checkAndResetDailyUsage() {
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String lastUsageDate = sharedPreferences.getString(KEY_AI_LAST_USAGE_DATE, "");
+
+        if (!today.equals(lastUsageDate)) {
+            editor.putString(KEY_AI_LAST_USAGE_DATE, today);
+            editor.putInt(KEY_AI_USAGE_COUNT, 0);
+            editor.apply();
+        }
     }
 
     // --- Gestione Blocco Globale ---

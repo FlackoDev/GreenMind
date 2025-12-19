@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.greenmind"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.greenmind"
@@ -44,6 +42,8 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.jbcrypt)
     implementation(libs.security.crypto)
+    implementation(libs.generativeai)
+    implementation(libs.guava)
     implementation("androidx.core:core-splashscreen:1.0.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

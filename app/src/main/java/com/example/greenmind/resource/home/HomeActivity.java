@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.greenmind.R;
 import com.example.greenmind.data.auth.SessionManager;
 import com.example.greenmind.databinding.ActivityHomeBinding;
+import com.example.greenmind.resource.ai.ChatBottomSheetFragment;
 import com.example.greenmind.resource.classifica.ClassificaActivity;
 import com.example.greenmind.resource.learn.LearnActivity;
 import com.example.greenmind.resource.profilo.ProfiloActivity;
@@ -65,6 +66,12 @@ public class HomeActivity extends AppCompatActivity {
         binding.cardReadArticle.setOnClickListener(v -> {
             startActivity(new Intent(this, LearnActivity.class));
             overridePendingTransition(0, 0);
+        });
+
+        // 5. Chat AI -> Apre il BottomSheet
+        binding.fabAiChat.setOnClickListener(v -> {
+            ChatBottomSheetFragment chatSheet = new ChatBottomSheetFragment();
+            chatSheet.show(getSupportFragmentManager(), chatSheet.getTag());
         });
     }
 
