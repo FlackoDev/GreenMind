@@ -14,6 +14,7 @@ import com.example.greenmind.resource.learn.LearnActivity;
 import com.example.greenmind.resource.model.Quiz;
 import com.example.greenmind.resource.profilo.ProfiloActivity;
 import com.example.greenmind.resource.quiz.QuizActivity;
+import com.example.greenmind.resource.quiz.QuizPlayActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -35,9 +36,15 @@ public class HomeActivity extends AppCompatActivity {
         quizManager = new QuizManager(this);
 
         updateUI();
-        loadDailyChallenge();
         setupBottomNavigation();
         setupClickListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Ricarica la sfida ogni volta che torni nella Home per aggiornare il tasto
+        loadDailyChallenge();
     }
 
     private void updateUI() {
@@ -59,7 +66,6 @@ public class HomeActivity extends AppCompatActivity {
             
             if (isCompleted) {
                 binding.buttonAcceptChallenge.setText("Vedi Risultati");
-                // Potresti anche cambiare il colore del tasto o aggiungere una spunta
             } else {
                 binding.buttonAcceptChallenge.setText("Accetta Sfida");
             }
@@ -89,7 +95,8 @@ public class HomeActivity extends AppCompatActivity {
     private void openQuiz() {
         if (dailyQuiz == null) return;
         
-        Intent intent = new Intent(this, QuizActivity.class);
+        // Corretto: carichiamo QuizPlayActivity per giocare il quiz del giorno
+        Intent intent = new Intent(this, QuizPlayActivity.class);
         intent.putExtra("quiz_id", dailyQuiz.getId());
         intent.putExtra("is_view_only", isCompleted);
         startActivity(intent);

@@ -37,17 +37,20 @@ public class QuizActivity extends AppCompatActivity {
         quizManager = new QuizManager(this);
         sessionManager = new SessionManager(this);
 
-        setupRecyclerView();
         setupBottomNavigation();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Ricarica la lista ogni volta che torni nella schermata per aggiornare i testi dei bottoni
+        setupRecyclerView();
     }
 
     private void setupRecyclerView() {
         List<Quiz> allQuizzes = quizDao.getAll();
         
-        QuizAdapter adapter = new QuizAdapter(allQuizzes, quiz -> {
-            // Controlla se l'utente ha già fatto questo quiz specifico
-            boolean isCompleted = quizManager.isQuizCompleted(sessionManager.getUserId(), quiz.getId());
-            
+        QuizAdapter adapter = new QuizAdapter(allQuizzes, quizManager, sessionManager.getUserId(), (quiz, isCompleted) -> {
             Intent intent = new Intent(QuizActivity.this, QuizPlayActivity.class);
             intent.putExtra("quiz_id", quiz.getId());
             intent.putExtra("is_view_only", isCompleted);

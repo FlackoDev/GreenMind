@@ -1,14 +1,14 @@
 package com.example.greenmind.resource.quiz;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import com.example.greenmind.R;
 import com.example.greenmind.data.auth.SessionManager;
 import com.example.greenmind.data.db.DBHelper;
 import com.example.greenmind.data.db.dao.AnswerOptionDao;
@@ -80,15 +80,14 @@ public class QuizPlayActivity extends AppCompatActivity {
 
     private void displayQuestion() {
         hasAnswered = false;
-        binding.buttonNext.setEnabled(false);
-        binding.cardExplanation.setVisibility(View.GONE);
+        binding.buttonNext.setEnabled(isViewOnly);
+        binding.cardExplanation.setVisibility(isViewOnly ? View.VISIBLE : View.GONE);
         binding.layoutOptions.removeAllViews();
 
         Question question = questionList.get(currentQuestionIndex);
         binding.textQuestion.setText(question.getText());
         binding.textExplanation.setText(question.getExplanation());
 
-        // Aggiorna Progresso
         int progress = (int) (((float) (currentQuestionIndex + 1) / questionList.size()) * 100);
         binding.quizProgressBar.setProgress(progress);
         binding.textProgressCount.setText((currentQuestionIndex + 1) + "/" + questionList.size());
@@ -101,29 +100,28 @@ public class QuizPlayActivity extends AppCompatActivity {
         if (currentQuestionIndex == questionList.size() - 1) {
             binding.buttonNext.setText(isViewOnly ? "Chiudi" : "Termina");
         } else {
-            binding.buttonNext.setText("Prossima Domanda");
+            binding.buttonNext.setText(isViewOnly ? "Avanti" : "Prossima Domanda");
         }
     }
 
     private void addOptionView(AnswerOption option) {
         ItemAnswerOptionBinding optionBinding = ItemAnswerOptionBinding.inflate(LayoutInflater.from(this), binding.layoutOptions, false);
         optionBinding.textOption.setText(option.getText());
+        optionBinding.getRoot().setTag(option); // Salviamo l'oggetto nel tag per recuperarlo dopo
 
-        optionBinding.getRoot().setOnClickListener(v -> {
-            if (!hasAnswered && !isViewOnly) {
-                handleAnswerSelection(option, optionBinding);
-            }
-        });
-
-        // Se in modalità sola lettura, mostra già le corrette (o potremmo gestire diversamente)
-        // Per ora facciamo che in sola lettura vedi la spiegazione subito
         if (isViewOnly) {
-            hasAnswered = true;
-            binding.buttonNext.setEnabled(true);
-            binding.cardExplanation.setVisibility(View.VISIBLE);
             if (option.isCorrect()) {
                 styleOptionCorrect(optionBinding);
+                optionBinding.imageStatus.setVisibility(View.VISIBLE);
+                optionBinding.imageStatus.setImageResource(android.R.drawable.checkbox_on_background);
             }
+            optionBinding.getRoot().setClickable(false);
+        } else {
+            optionBinding.getRoot().setOnClickListener(v -> {
+                if (!hasAnswered) {
+                    handleAnswerSelection(option, optionBinding);
+                }
+            });
         }
 
         binding.layoutOptions.addView(optionBinding.getRoot());
@@ -139,7 +137,6 @@ public class QuizPlayActivity extends AppCompatActivity {
             styleOptionCorrect(selectedBinding);
         } else {
             styleOptionWrong(selectedBinding);
-            // Evidenzia comunque quella corretta
             highlightCorrectAnswer();
         }
     }
@@ -147,11 +144,12 @@ public class QuizPlayActivity extends AppCompatActivity {
     private void highlightCorrectAnswer() {
         for (int i = 0; i < binding.layoutOptions.getChildCount(); i++) {
             View v = binding.layoutOptions.getChildAt(i);
-            // Questo è un po' grezzo, ma serve a trovare la corretta
-            // In un caso reale useremmo dei tag o una lista di binding
+            AnswerOption opt = (AnswerOption) v.getTag();
+            if (opt != null && opt.isCorrect()) {
+                // Trovata la corretta, la evidenziamo
+                v.setBackgroundColor(Color.parseColor("#E8F5E9")); // Sfondo leggero verde
+            }
         }
-        // Nota: Per semplicità in questo esempio ricarichiamo la logica o cerchiamo nel layout
-        // Ma l'importante è che l'utente veda il verde.
     }
 
     private void styleOptionCorrect(ItemAnswerOptionBinding b) {
@@ -180,29 +178,43 @@ public class QuizPlayActivity extends AppCompatActivity {
     }
 
     private void saveResultsAndFinish() {
-        // Calcolo punteggio: (PuntiTotali * RisposteGiuste) / TotaleDomande
         int totalScore = (currentQuiz.getPoints() * correctAnswersCount) / questionList.size();
-        
         DBHelper dbHelper = new DBHelper(this);
-        android.database.sqlite.SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         int userId = sessionManager.getUserId();
+        if (userId == -1) {
+            finish();
+            return;
+        }
+        
         long now = System.currentTimeMillis();
 
-        // 1. Salva in QuizResult
-        android.content.ContentValues cvResult = new android.content.ContentValues();
-        cvResult.put("userId", userId);
-        cvResult.put("quizId", currentQuiz.getId());
-        cvResult.put("score", totalScore);
-        cvResult.put("date", now);
-        db.insert(DBHelper.T_QUIZ_RESULT, null, cvResult);
+        db.beginTransaction();
+        try {
+            // 1. Salva in QuizResult
+            ContentValues cvResult = new ContentValues();
+            cvResult.put("userId", userId);
+            cvResult.put("quizId", currentQuiz.getId());
+            cvResult.put("score", totalScore);
+            cvResult.put("date", now);
+            db.insert(DBHelper.T_QUIZ_RESULT, null, cvResult);
 
-        // 2. Aggiorna UserStats
-        db.execSQL("UPDATE " + DBHelper.T_USER_STATS + 
-                   " SET totalPoints = totalPoints + " + totalScore + 
-                   ", totalQuizzes = totalQuizzes + 1 WHERE userId = " + userId);
+            // 2. Upsert nelle statistiche (Assicurati che esista e aggiorna)
+            db.execSQL("INSERT OR IGNORE INTO " + DBHelper.T_USER_STATS + 
+                       " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (" + userId + ", 0, 0, 0)");
+            
+            db.execSQL("UPDATE " + DBHelper.T_USER_STATS + 
+                       " SET totalPoints = totalPoints + " + totalScore + 
+                       ", totalQuizzes = totalQuizzes + 1 WHERE userId = " + userId);
 
-        Toast.makeText(this, "Quiz completato! Punti guadagnati: " + totalScore, Toast.LENGTH_LONG).show();
-        finish();
+            db.setTransactionSuccessful();
+            Toast.makeText(this, "Quiz completato! Punti: " + totalScore, Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Errore nel salvataggio", Toast.LENGTH_SHORT).show();
+        } finally {
+            db.endTransaction();
+            finish();
+        }
     }
 }
