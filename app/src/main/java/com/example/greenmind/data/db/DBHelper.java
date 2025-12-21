@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 6;
+    public static final int DB_VERSION = 10;
 
     // ----- TABLE NAMES -----
     public static final String T_QUIZ = "Quiz";
@@ -54,10 +54,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 ");");
 
         db.execSQL("CREATE TABLE " + T_LEARNING_CONTENT + " (" +
-                "id INTEGER PRIMARY KEY, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "title TEXT NOT NULL, " +
                 "category TEXT, " +
-                "readingTimeMin INTEGER NOT NULL DEFAULT 0" +
+                "readingTimeMin INTEGER NOT NULL DEFAULT 0, " +
+                "preview TEXT, " +
+                "content TEXT" +
                 ");");
 
         db.execSQL("CREATE TABLE " + T_BADGE + " (" +
@@ -180,5 +182,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + T_LEARNING_CONTENT);
         db.execSQL("DROP TABLE IF EXISTS " + T_LEVEL);
         onCreate(db);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
     }
 }

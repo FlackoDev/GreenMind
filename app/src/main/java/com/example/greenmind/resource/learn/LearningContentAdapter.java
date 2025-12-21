@@ -63,13 +63,13 @@ public class LearningContentAdapter extends RecyclerView.Adapter<LearningContent
             b.txtCategory.setText(item.getCategory());
             b.txtTime.setText(item.getReadingTimeMin() + " min");
 
-            // Preview e immagine: dipendono dai campi che hai nel DB.
-            // Se per ora non ce li hai, metto fallback.
-            String preview = getPreviewSafe(item);
+            String preview = item.getPreview();
+            if (preview == null || preview.isEmpty()) {
+                preview = "Scopri di più sull’argomento e leggi una guida pratica...";
+            }
             b.txtPreview.setText(preview);
 
-            int imgRes = getImageResSafe(b.getRoot().getContext(), item);
-            b.imgCover.setImageResource(imgRes);
+
 
             b.btnRead.setOnClickListener(v -> {
                 if (listener != null) listener.onRead(item);
@@ -78,12 +78,6 @@ public class LearningContentAdapter extends RecyclerView.Adapter<LearningContent
             b.getRoot().setOnClickListener(v -> {
                 if (listener != null) listener.onRead(item);
             });
-        }
-
-        private String getPreviewSafe(LearningContent item) {
-            // se NON hai preview nel model, puoi lasciare una stringa vuota oppure derivarla
-            // TODO: sostituire con item.getPreview() quando aggiungi il campo
-            return "Scopri di più sull’argomento e leggi una guida pratica...";
         }
 
         private int getImageResSafe(Context ctx, LearningContent item) {

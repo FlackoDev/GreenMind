@@ -20,7 +20,7 @@ public class LearnActivity extends AppCompatActivity {
 
     private ActivityLearnBinding binding;
     private LearningContentAdapter adapter;
-    private LearningContentDao learningContentDao; // crea questo DAO come i tuoi altri
+    private LearningContentDao learningContentDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +30,25 @@ public class LearnActivity extends AppCompatActivity {
 
         setupBottomNavigation();
         setupRecycler();
+        binding.btnAddContent.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddLearningContentActivity.class);
+            startActivity(intent);
+        });
 
         learningContentDao = new LearningContentDao(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         loadContents();
     }
 
     private void setupRecycler() {
         adapter = new LearningContentAdapter(content -> {
-            // quando clicchi "Leggi articolo completo >"gyk
-//            Intent i = new Intent(this, LearningDetailActivity.class);
-//            i.putExtra("content_id", content.getId());
-//            startActivity(i);
+            Intent i = new Intent(this, LearningDetailActivity.class);
+            i.putExtra("content_id", content.getId());
+            startActivity(i);
         });
 
         binding.recyclerLearning.setLayoutManager(new LinearLayoutManager(this));

@@ -46,6 +46,15 @@
             android:theme="@style/Theme.GreenMind"
             android:label="Impostazioni" />
 
+
+        <activity
+            android:name=".resource.learn.AddLearningContentActivity"
+            android:theme="@style/Theme.GreenMind"
+            android:exported="false" />
+        <activity
+            android:name=".resource.learn.LearningDetailActivity"
+            android:theme="@style/Theme.GreenMind"
+            android:exported="false" />
     </application>
 
 </manifest>

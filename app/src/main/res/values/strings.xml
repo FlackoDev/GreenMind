@@ -29,4 +29,7 @@
     <string name="home_quick_activities">Attività Rapide</string>
     <string name="home_quick_quiz">Quiz Rapido</string>
     <string name="home_read_article">Leggi Articolo</string>
+    <string name="titolo_articolo">Titolo articolo</string>
+    <string name="categoria">Categoria</string>
+    <string name="tempo_di_lettura">Tempo di lettura (minuti)</string>
 </resources>
