@@ -44,10 +44,17 @@ public class ProfiloActivity extends AppCompatActivity {
         userStatsDao = new UserStatsDao(this);
 
         setupBottomNavigation();
-        loadUserData();
-        setupBadges();
         setupOverlayButtons();
+        setupBadges();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Ricarica i dati ogni volta che la schermata viene visualizzata
+        loadUserData();
+    }
+
     private void setupOverlayButtons() {
         binding.btnLogout.setOnClickListener(v -> {
             sessionManager.logout();

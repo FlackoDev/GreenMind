@@ -54,12 +54,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 ");");
 
         db.execSQL("CREATE TABLE " + T_LEARNING_CONTENT + " (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id INTEGER PRIMARY KEY, " +
                 "title TEXT NOT NULL, " +
                 "category TEXT, " +
-                "readingTimeMin INTEGER NOT NULL DEFAULT 0, " +
-                "preview TEXT, " +
-                "content TEXT" +
+                "readingTimeMin INTEGER NOT NULL DEFAULT 0" +
                 ");");
 
         db.execSQL("CREATE TABLE " + T_BADGE + " (" +
@@ -182,10 +180,5 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + T_LEARNING_CONTENT);
         db.execSQL("DROP TABLE IF EXISTS " + T_LEVEL);
         onCreate(db);
-    }
-
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        onUpgrade(db, oldVersion, newVersion);
     }
 }

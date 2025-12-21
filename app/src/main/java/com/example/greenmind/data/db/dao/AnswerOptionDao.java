@@ -1,6 +1,5 @@
 package com.example.greenmind.data.db.dao;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,49 +12,44 @@ import java.util.List;
 
 public class AnswerOptionDao {
 
+    public static final String COL_ID = "id";
+    public static final String COL_QUESTION_ID = "questionId";
+    public static final String COL_TEXT = "text";
+    public static final String COL_IS_CORRECT = "isCorrect";
+
     private final DBHelper dbHelper;
 
     public AnswerOptionDao(Context context) {
-        dbHelper = new DBHelper(context);
-    }
-
-    public long upsert(AnswerOption a) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("id", a.getId());
-        cv.put("questionId", a.getQuestionId());
-        cv.put("text", a.getText());
-        cv.put("isCorrect", a.isCorrect() ? 1 : 0);
-
-        return db.insertWithOnConflict(
-                DBHelper.T_ANSWER_OPTION,
-                null,
-                cv,
-                SQLiteDatabase.CONFLICT_REPLACE
-        );
+        this.dbHelper = new DBHelper(context);
     }
 
     public List<AnswerOption> getByQuestionId(int questionId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        List<AnswerOption> list = new ArrayList<>();
-
-        Cursor c = db.query(
-                DBHelper.T_ANSWER_OPTION,
-                null,
-                "questionId=?",
-                new String[]{String.valueOf(questionId)},
-                null, null, null
-        );
-
-        while (c.moveToNext()) {
-            list.add(new AnswerOption(
-                    c.getInt(c.getColumnIndexOrThrow("id")),
-                    questionId,
-                    c.getString(c.getColumnIndexOrThrow("text")),
-                    c.getInt(c.getColumnIndexOrThrow("isCorrect")) == 1
-            ));
+        List<AnswerOption> result = new ArrayList<>();
+        Cursor c = null;
+        try {
+            c = db.query(
+                    DBHelper.T_ANSWER_OPTION,
+                    null,
+                    COL_QUESTION_ID + "=?",
+                    new String[]{String.valueOf(questionId)},
+                    null, null, null
+            );
+            while (c.moveToNext()) {
+                result.add(fromCursor(c));
+            }
+            return result;
+        } finally {
+            if (c != null) c.close();
         }
-        c.close();
-        return list;
+    }
+
+    private AnswerOption fromCursor(Cursor c) {
+        AnswerOption ao = new AnswerOption();
+        ao.setId(c.getInt(c.getColumnIndexOrThrow(COL_ID)));
+        ao.setQuestionId(c.getInt(c.getColumnIndexOrThrow(COL_QUESTION_ID)));
+        ao.setText(c.getString(c.getColumnIndexOrThrow(COL_TEXT)));
+        ao.setCorrect(c.getInt(c.getColumnIndexOrThrow(COL_IS_CORRECT)) == 1);
+        return ao;
     }
 }

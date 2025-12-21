@@ -22,6 +22,10 @@
     <color name="trophy_yellow">#FFD600</color>
     <color name="light_green_bg">#C8E6C9</color>
 
+    <!-- Toni di Grigio mancanti -->
+    <color name="gray_600">#757575</color>
+    <color name="gray_400">#BDBDBD</color>
+
     <!-- Colori per Effetti UI -->
     <color name="ripple_effect">#40FFFFFF</color> <!-- Bianco con 25% di opacità -->
     <color name="ripple_dark">#40000000</color> <!-- Nero con 25% di opacità -->

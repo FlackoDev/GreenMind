@@ -2,21 +2,28 @@ package com.example.greenmind.resource.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.greenmind.R;
 import com.example.greenmind.data.auth.SessionManager;
+import com.example.greenmind.data.repository.QuizManager;
 import com.example.greenmind.databinding.ActivityHomeBinding;
 import com.example.greenmind.resource.classifica.ClassificaActivity;
 import com.example.greenmind.resource.learn.LearnActivity;
+import com.example.greenmind.resource.model.Quiz;
 import com.example.greenmind.resource.profilo.ProfiloActivity;
 import com.example.greenmind.resource.quiz.QuizActivity;
+import com.example.greenmind.resource.quiz.QuizPlayActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
     private SessionManager sessionManager;
+    private QuizManager quizManager;
+    private Quiz dailyQuiz;
+    private boolean isCompleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,46 +33,74 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         sessionManager = new SessionManager(this);
+        quizManager = new QuizManager(this);
 
         updateUI();
         setupBottomNavigation();
         setupClickListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Ricarica la sfida ogni volta che torni nella Home per aggiornare il tasto
+        loadDailyChallenge();
+    }
+
     private void updateUI() {
         String fullName = sessionManager.getUserName();
-        
-        // Imposta il saluto dinamico
         binding.textWelcome.setText("Ciao, " + fullName + "!");
-
-        // Calcola e imposta le iniziali
         binding.profileInitials.setText(getInitials(fullName));
     }
 
+    private void loadDailyChallenge() {
+        dailyQuiz = quizManager.getDailyQuiz();
+        
+        if (dailyQuiz != null) {
+            binding.textChallengeName.setText(dailyQuiz.getTitle());
+            String info = dailyQuiz.getNumQuestions() + " domande - " + dailyQuiz.getPoints() + " punti";
+            binding.textChallengeDescription.setText(info);
+
+            // Controlla se è già stato fatto
+            isCompleted = quizManager.isQuizCompleted(sessionManager.getUserId(), dailyQuiz.getId());
+            
+            if (isCompleted) {
+                binding.buttonAcceptChallenge.setText("Vedi Risultati");
+            } else {
+                binding.buttonAcceptChallenge.setText("Accetta Sfida");
+            }
+        }
+    }
+
     private void setupClickListeners() {
-        // 1. AZ -> Profilo
         binding.profileInitials.setOnClickListener(v -> {
             startActivity(new Intent(this, ProfiloActivity.class));
             overridePendingTransition(0, 0);
         });
 
-        // 2. Quiz Rapido -> Quiz
         binding.cardQuickQuiz.setOnClickListener(v -> {
-            startActivity(new Intent(this, QuizActivity.class));
-            overridePendingTransition(0, 0);
+            openQuiz();
         });
 
-        // 3. Accetta Sfida -> Quiz
         binding.buttonAcceptChallenge.setOnClickListener(v -> {
-            startActivity(new Intent(this, QuizActivity.class));
-            overridePendingTransition(0, 0);
+            openQuiz();
         });
 
-        // 4. Leggi Articolo -> Learn (Impara)
         binding.cardReadArticle.setOnClickListener(v -> {
             startActivity(new Intent(this, LearnActivity.class));
             overridePendingTransition(0, 0);
         });
+    }
+
+    private void openQuiz() {
+        if (dailyQuiz == null) return;
+        
+        // Corretto: carichiamo QuizPlayActivity per giocare il quiz del giorno
+        Intent intent = new Intent(this, QuizPlayActivity.class);
+        intent.putExtra("quiz_id", dailyQuiz.getId());
+        intent.putExtra("is_view_only", isCompleted);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 
     private void setupBottomNavigation() {
@@ -103,16 +138,13 @@ public class HomeActivity extends AppCompatActivity {
 
     private String getInitials(String name) {
         if (name == null || name.isEmpty()) return "??";
-        
         String[] parts = name.trim().split("\\s+");
         StringBuilder initials = new StringBuilder();
-        
         for (int i = 0; i < Math.min(parts.length, 2); i++) {
             if (!parts[i].isEmpty()) {
                 initials.append(parts[i].charAt(0));
             }
         }
-        
         return initials.toString().toUpperCase();
     }
 }
