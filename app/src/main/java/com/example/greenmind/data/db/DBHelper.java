@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 10;
+    public static final int DB_VERSION = 11;
 
     // ----- TABLE NAMES -----
     public static final String T_QUIZ = "Quiz";
@@ -35,12 +35,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Parent tables
         db.execSQL("CREATE TABLE " + T_QUIZ + " (" +
                 "id INTEGER PRIMARY KEY, " +
                 "title TEXT NOT NULL, " +
                 "category TEXT, " +
-                "difficulty TEXT" +
+                "difficulty TEXT, " +
+                "points INTEGER DEFAULT 0, " +
+                "numQuestions INTEGER DEFAULT 0" +
                 ");");
 
         db.execSQL("CREATE TABLE " + T_USER + " (" +
@@ -73,11 +74,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 "requiredPoints INTEGER NOT NULL DEFAULT 0" +
                 ");");
 
-        // Child tables
         db.execSQL("CREATE TABLE " + T_QUESTION + " (" +
                 "id INTEGER PRIMARY KEY, " +
                 "quizId INTEGER NOT NULL, " +
                 "text TEXT NOT NULL, " +
+                "explanation TEXT, " +
                 "FOREIGN KEY(quizId) REFERENCES " + T_QUIZ + "(id) ON UPDATE CASCADE ON DELETE CASCADE" +
                 ");");
 
@@ -115,60 +116,67 @@ public class DBHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) ON UPDATE CASCADE ON DELETE CASCADE" +
                 ");");
 
-        // Indexes
         db.execSQL("CREATE INDEX idx_question_quizId ON " + T_QUESTION + "(quizId);");
         db.execSQL("CREATE INDEX idx_answeroption_questionId ON " + T_ANSWER_OPTION + "(questionId);");
         db.execSQL("CREATE INDEX idx_quizresult_userId ON " + T_QUIZ_RESULT + "(userId);");
         db.execSQL("CREATE INDEX idx_quiz_category ON " + T_QUIZ + "(category);");
 
-        // Popolamento dati iniziali
         insertSampleData(db);
     }
 
     private void insertSampleData(SQLiteDatabase db) {
-        // 1. 10 Badge di esempio
+        // --- BADGES ---
         db.execSQL("INSERT INTO " + T_BADGE + " (id, name, description, requiredPoints) VALUES " +
                 "(1, 'GREEN SCOUT', 'Primi passi verso la sostenibilità', 100), " +
                 "(2, 'NATURE LOVER', 'Appassionato della biodiversità', 250), " +
-                "(3, 'ECO WARRIOR', 'Guerriero per un mondo più pulito', 500), " +
-                "(4, 'EARTH SAVER', 'Protettore attivo del pianeta', 750), " +
-                "(5, 'RECYCLE MASTER', 'Maestro del riciclo creativo', 1000), " +
-                "(6, 'SUSTAINABILITY HERO', 'Eroe della vita sostenibile', 1500), " +
-                "(7, 'CLIMATE GUARDIAN', 'Custode del clima globale', 2000), " +
-                "(8, 'FOREST PROTECTOR', 'Difensore dei polmoni verdi', 3000), " +
-                "(9, 'OCEAN DEFENDER', 'Protettore delle acque e dei mari', 4000), " +
-                "(10, 'PLANET CHAMPION', 'Campione assoluto della Terra', 5000);");
+                "(3, 'ECO WARRIOR', 'Guerriero per un mondo più pulito', 500);");
 
-        // 2. Utenti di esempio (password: password123)
+        // --- UTENTI ---
         String hashedPw = BCrypt.hashpw("password123", BCrypt.gensalt());
         long now = System.currentTimeMillis();
+        db.execSQL("INSERT INTO " + T_USER + " (id, name, email, passwordHash, createdAt) VALUES " +
+                "(1, 'Ale', 'ale@gmail.com', '" + hashedPw + "', " + now + ");");
+        db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (1, 0, 0, 0);");
 
-        ContentValues user1 = new ContentValues();
-        user1.put("name", "Ale");
-        user1.put("email", "ale@gmail.com");
-        user1.put("passwordHash", hashedPw);
-        user1.put("createdAt", now);
-        long u1Id = db.insert(T_USER, null, user1);
+        // --- QUIZ DI ESEMPIO (Giorno 1) ---
+        db.execSQL("INSERT INTO " + T_QUIZ + " (id, title, category, difficulty, points, numQuestions) VALUES " +
+                "(1, 'Quiz Rifiuti Base', 'Gestione Rifiuti', 'Facile', 100, 2);");
 
-        ContentValues user2 = new ContentValues();
-        user2.put("name", "Rachele");
-        user2.put("email", "rachele@gmail.com");
-        user2.put("passwordHash", hashedPw);
-        user2.put("createdAt", now);
-        long u2Id = db.insert(T_USER, null, user2);
+        // Domanda 1
+        db.execSQL("INSERT INTO " + T_QUESTION + " (id, quizId, text, explanation) VALUES " +
+                "(1, 1, 'Dove va gettato un bicchiere di vetro rotto?', " +
+                "'Il vetro cristallo o pyrex ha un punto di fusione diverso dal vetro da imballaggio. Va nel secco.');");
+        db.execSQL("INSERT INTO " + T_ANSWER_OPTION + " (id, questionId, text, isCorrect) VALUES " +
+                "(1, 1, 'Vetro', 0), (2, 1, 'Secco/Indifferenziato', 1), (3, 1, 'Plastica', 0), (4, 1, 'Umido', 0);");
 
-        // 3. Statistiche per gli utenti
-        if (u1Id != -1) {
-            db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (" + u1Id + ", 42, 1250, 12.5);");
-        }
-        if (u2Id != -1) {
-            db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (" + u2Id + ", 15, 450, -2.0);");
-        }
+        // Domanda 2
+        db.execSQL("INSERT INTO " + T_QUESTION + " (id, quizId, text, explanation) VALUES " +
+                "(2, 1, 'Gli scontrini della spesa vanno gettati nella carta?', " +
+                "'No, la maggior parte degli scontrini è fatta di carta termica che reagisce al calore e non può essere riciclata con la carta.');");
+        db.execSQL("INSERT INTO " + T_ANSWER_OPTION + " (id, questionId, text, isCorrect) VALUES " +
+                "(5, 2, 'Sì', 0), (6, 2, 'No, vanno nel secco', 1);");
+
+        // --- QUIZ DI ESEMPIO (Giorno 2) ---
+        db.execSQL("INSERT INTO " + T_QUIZ + " (id, title, category, difficulty, points, numQuestions) VALUES " +
+                "(2, 'Cambiamento Climatico', 'Emergenze Climatiche', 'Medio', 200, 2);");
+
+        // Domanda 3
+        db.execSQL("INSERT INTO " + T_QUESTION + " (id, quizId, text, explanation) VALUES " +
+                "(3, 2, 'Qual è il principale gas serra emesso dalle attività umane?', " +
+                "'L''anidride carbonica (CO2) è il principale gas serra derivante dalla combustione di combustibili fossili.');");
+        db.execSQL("INSERT INTO " + T_ANSWER_OPTION + " (id, questionId, text, isCorrect) VALUES " +
+                "(7, 3, 'Metano', 0), (8, 3, 'Anidride Carbonica', 1), (9, 3, 'Ossigeno', 0);");
+        
+        // Domanda 4
+        db.execSQL("INSERT INTO " + T_QUESTION + " (id, quizId, text, explanation) VALUES " +
+                "(4, 2, 'Cosa si intende per Neutralità Carbonica?', " +
+                "'Significa bilanciare le emissioni di CO2 con la loro rimozione dall''atmosfera.');");
+        db.execSQL("INSERT INTO " + T_ANSWER_OPTION + " (id, questionId, text, isCorrect) VALUES " +
+                "(10, 4, 'Non emettere nulla', 0), (11, 4, 'Bilanciare emissioni e rimozione', 1);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Reset totale per sviluppo
         db.execSQL("DROP TABLE IF EXISTS " + T_ANSWER_OPTION);
         db.execSQL("DROP TABLE IF EXISTS " + T_QUESTION);
         db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ_RESULT);
