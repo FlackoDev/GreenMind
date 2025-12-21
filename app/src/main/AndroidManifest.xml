@@ -36,6 +36,9 @@
             android:name=".resource.quiz.QuizActivity"
             android:theme="@style/Theme.GreenMind" />
         <activity
+            android:name=".resource.quiz.QuizPlayActivity"
+            android:theme="@style/Theme.GreenMind" />
+        <activity
             android:name=".resource.classifica.ClassificaActivity"
             android:theme="@style/Theme.GreenMind" />
         <activity

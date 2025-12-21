@@ -13,47 +13,44 @@ import java.util.List;
 
 public class QuestionDao {
 
+    public static final String COL_ID = "id";
+    public static final String COL_QUIZ_ID = "quizId";
+    public static final String COL_TEXT = "text";
+    public static final String COL_EXPLANATION = "explanation";
+
     private final DBHelper dbHelper;
 
     public QuestionDao(Context context) {
-        dbHelper = new DBHelper(context);
-    }
-
-    public long upsert(Question q) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("id", q.getId());
-        cv.put("quizId", q.getQuizId());
-        cv.put("text", q.getText());
-
-        return db.insertWithOnConflict(
-                DBHelper.T_QUESTION,
-                null,
-                cv,
-                SQLiteDatabase.CONFLICT_REPLACE
-        );
+        this.dbHelper = new DBHelper(context);
     }
 
     public List<Question> getByQuizId(int quizId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        List<Question> list = new ArrayList<>();
-
-        Cursor c = db.query(
-                DBHelper.T_QUESTION,
-                null,
-                "quizId=?",
-                new String[]{String.valueOf(quizId)},
-                null, null, null
-        );
-
-        while (c.moveToNext()) {
-            list.add(new Question(
-                    c.getInt(c.getColumnIndexOrThrow("id")),
-                    quizId,
-                    c.getString(c.getColumnIndexOrThrow("text"))
-            ));
+        List<Question> result = new ArrayList<>();
+        Cursor c = null;
+        try {
+            c = db.query(
+                    DBHelper.T_QUESTION,
+                    null,
+                    COL_QUIZ_ID + "=?",
+                    new String[]{String.valueOf(quizId)},
+                    null, null, null
+            );
+            while (c.moveToNext()) {
+                result.add(fromCursor(c));
+            }
+            return result;
+        } finally {
+            if (c != null) c.close();
         }
-        c.close();
-        return list;
+    }
+
+    private Question fromCursor(Cursor c) {
+        Question q = new Question();
+        q.setId(c.getInt(c.getColumnIndexOrThrow(COL_ID)));
+        q.setQuizId(c.getInt(c.getColumnIndexOrThrow(COL_QUIZ_ID)));
+        q.setText(c.getString(c.getColumnIndexOrThrow(COL_TEXT)));
+        q.setExplanation(c.getString(c.getColumnIndexOrThrow(COL_EXPLANATION)));
+        return q;
     }
 }
