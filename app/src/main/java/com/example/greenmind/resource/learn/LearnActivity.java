@@ -37,7 +37,7 @@ public class LearnActivity extends AppCompatActivity {
 
     private void setupRecycler() {
         adapter = new LearningContentAdapter(content -> {
-            // quando clicchi "Leggi articolo completo >"
+            // quando clicchi "Leggi articolo completo >"gyk
 //            Intent i = new Intent(this, LearningDetailActivity.class);
 //            i.putExtra("content_id", content.getId());
 //            startActivity(i);
