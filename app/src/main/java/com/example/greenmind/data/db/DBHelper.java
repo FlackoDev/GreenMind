@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 8; // Incrementata versione
+    public static final int DB_VERSION = 11;
 
     // ----- TABLE NAMES -----
     public static final String T_QUIZ = "Quiz";
