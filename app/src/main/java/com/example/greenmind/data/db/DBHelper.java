@@ -5,11 +5,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import org.mindrot.jbcrypt.BCrypt;
+import java.util.Calendar;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 11;
+    public static final int DB_VERSION = 14;
 
     // ----- TABLE NAMES -----
     public static final String T_QUIZ = "Quiz";
@@ -116,63 +117,42 @@ public class DBHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) ON UPDATE CASCADE ON DELETE CASCADE" +
                 ");");
 
-        db.execSQL("CREATE INDEX idx_question_quizId ON " + T_QUESTION + "(quizId);");
-        db.execSQL("CREATE INDEX idx_answeroption_questionId ON " + T_ANSWER_OPTION + "(questionId);");
-        db.execSQL("CREATE INDEX idx_quizresult_userId ON " + T_QUIZ_RESULT + "(userId);");
-        db.execSQL("CREATE INDEX idx_quiz_category ON " + T_QUIZ + "(category);");
-
         insertSampleData(db);
     }
 
     private void insertSampleData(SQLiteDatabase db) {
-        // --- BADGES ---
+        // 1. BADGES (senza \n per evitare problemi di visualizzazione)
         db.execSQL("INSERT INTO " + T_BADGE + " (id, name, description, requiredPoints) VALUES " +
-                "(1, 'GREEN SCOUT', 'Primi passi verso la sostenibilità', 100), " +
-                "(2, 'NATURE LOVER', 'Appassionato della biodiversità', 250), " +
-                "(3, 'ECO WARRIOR', 'Guerriero per un mondo più pulito', 500);");
+                "(1, 'GREEN SCOUT', 'Primi passi', 100), " +
+                "(2, 'NATURE LOVER', 'Appassionato', 250), " +
+                "(3, 'ECO WARRIOR', 'Guerriero', 500), " +
+                "(4, 'RECYCLE MASTER', 'Maestro del riciclo', 1000);");
 
-        // --- UTENTI ---
-        String hashedPw = BCrypt.hashpw("password123", BCrypt.gensalt());
-        long now = System.currentTimeMillis();
-        db.execSQL("INSERT INTO " + T_USER + " (id, name, email, passwordHash, createdAt) VALUES " +
-                "(1, 'Ale', 'ale@gmail.com', '" + hashedPw + "', " + now + ");");
-        db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (1, 0, 0, 0);");
-
-        // --- QUIZ DI ESEMPIO (Giorno 1) ---
+        // 2. QUIZ
         db.execSQL("INSERT INTO " + T_QUIZ + " (id, title, category, difficulty, points, numQuestions) VALUES " +
                 "(1, 'Quiz Rifiuti Base', 'Gestione Rifiuti', 'Facile', 100, 2);");
-
-        // Domanda 1
-        db.execSQL("INSERT INTO " + T_QUESTION + " (id, quizId, text, explanation) VALUES " +
-                "(1, 1, 'Dove va gettato un bicchiere di vetro rotto?', " +
-                "'Il vetro cristallo o pyrex ha un punto di fusione diverso dal vetro da imballaggio. Va nel secco.');");
-        db.execSQL("INSERT INTO " + T_ANSWER_OPTION + " (id, questionId, text, isCorrect) VALUES " +
-                "(1, 1, 'Vetro', 0), (2, 1, 'Secco/Indifferenziato', 1), (3, 1, 'Plastica', 0), (4, 1, 'Umido', 0);");
-
-        // Domanda 2
-        db.execSQL("INSERT INTO " + T_QUESTION + " (id, quizId, text, explanation) VALUES " +
-                "(2, 1, 'Gli scontrini della spesa vanno gettati nella carta?', " +
-                "'No, la maggior parte degli scontrini è fatta di carta termica che reagisce al calore e non può essere riciclata con la carta.');");
-        db.execSQL("INSERT INTO " + T_ANSWER_OPTION + " (id, questionId, text, isCorrect) VALUES " +
-                "(5, 2, 'Sì', 0), (6, 2, 'No, vanno nel secco', 1);");
-
-        // --- QUIZ DI ESEMPIO (Giorno 2) ---
         db.execSQL("INSERT INTO " + T_QUIZ + " (id, title, category, difficulty, points, numQuestions) VALUES " +
-                "(2, 'Cambiamento Climatico', 'Emergenze Climatiche', 'Medio', 200, 2);");
+                "(2, 'Cambiamento Climatico', 'Emergenze', 'Medio', 200, 2);");
 
-        // Domanda 3
-        db.execSQL("INSERT INTO " + T_QUESTION + " (id, quizId, text, explanation) VALUES " +
-                "(3, 2, 'Qual è il principale gas serra emesso dalle attività umane?', " +
-                "'L''anidride carbonica (CO2) è il principale gas serra derivante dalla combustione di combustibili fossili.');");
-        db.execSQL("INSERT INTO " + T_ANSWER_OPTION + " (id, questionId, text, isCorrect) VALUES " +
-                "(7, 3, 'Metano', 0), (8, 3, 'Anidride Carbonica', 1), (9, 3, 'Ossigeno', 0);");
+        // 3. UTENTI
+        String hashedPw = BCrypt.hashpw("password123", BCrypt.gensalt());
+        long now = System.currentTimeMillis();
         
-        // Domanda 4
-        db.execSQL("INSERT INTO " + T_QUESTION + " (id, quizId, text, explanation) VALUES " +
-                "(4, 2, 'Cosa si intende per Neutralità Carbonica?', " +
-                "'Significa bilanciare le emissioni di CO2 con la loro rimozione dall''atmosfera.');");
-        db.execSQL("INSERT INTO " + T_ANSWER_OPTION + " (id, questionId, text, isCorrect) VALUES " +
-                "(10, 4, 'Non emettere nulla', 0), (11, 4, 'Bilanciare emissioni e rimozione', 1);");
+        // Account Rachele (id 3)
+        db.execSQL("INSERT INTO " + T_USER + " (id, name, email, passwordHash, createdAt) VALUES (3, 'Rachele', 'rachele@gmail.com', '" + hashedPw + "', " + now + ");");
+        db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (3, 15, 650, 15.5);");
+
+        // 4. RISULTATI PER IL GRAFICO (Account 3)
+        Calendar cal = Calendar.getInstance();
+        long t0 = cal.getTimeInMillis();
+        cal.add(Calendar.DAY_OF_YEAR, -1); long t1 = cal.getTimeInMillis();
+        cal.add(Calendar.DAY_OF_YEAR, -2); long t2 = cal.getTimeInMillis();
+        cal.add(Calendar.DAY_OF_YEAR, -1); long t3 = cal.getTimeInMillis();
+
+        db.execSQL("INSERT INTO " + T_QUIZ_RESULT + " (userId, quizId, score, date) VALUES (3, 1, 150, " + t0 + ");");
+        db.execSQL("INSERT INTO " + T_QUIZ_RESULT + " (userId, quizId, score, date) VALUES (3, 1, 80, " + t1 + ");");
+        db.execSQL("INSERT INTO " + T_QUIZ_RESULT + " (userId, quizId, score, date) VALUES (3, 2, 200, " + t2 + ");");
+        db.execSQL("INSERT INTO " + T_QUIZ_RESULT + " (userId, quizId, score, date) VALUES (3, 2, 50, " + t3 + ");");
     }
 
     @Override
