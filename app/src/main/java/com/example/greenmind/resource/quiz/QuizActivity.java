@@ -38,12 +38,15 @@ public class QuizActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         setupBottomNavigation();
+        
+        binding.btnAddQuiz.setOnClickListener(v -> {
+            startActivity(new Intent(this, AddQuizActivity.class));
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Ricarica la lista ogni volta che torni nella schermata per aggiornare i testi dei bottoni
         setupRecyclerView();
     }
 

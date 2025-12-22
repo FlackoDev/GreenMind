@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 13; // Incrementato per aggiornamento contenuti
+    public static final int DB_VERSION = 14; // Incrementato per testo lungo e nuovi dati
 
     // ----- TABLE NAMES -----
     public static final String T_QUIZ = "Quiz";
@@ -145,7 +145,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(1, 'L''arte del riciclo creativo', 'Sostenibilità', 'Scopri come trasformare i rifiuti in oggetti utili.', " +
                 "'Il riciclo creativo è una pratica che permette di dare nuova vita a oggetti che altrimenti finirebbero in discarica. Oltre a ridurre l''inquinamento, stimola la creatività.', 5), " +
                 "(2, 'Energia Rinnovabile in Casa', 'Ambiente', 'Piccoli passi per ridurre l''impatto energetico domestico.', " +
-                "'L''utilizzo di pannelli solari e lampadine a LED può ridurre drasticamente il consumo di energia elettrica. La sostenibilità parte dalle mura di casa nostra.', 8);");
+                "'L''utilizzo di pannelli solari e lampadine a LED può ridurre drasticamente il consumo di energia elettrica.\\n\\n" +
+                "La sostenibilità parte dalle mura di casa nostra. Ma cosa significa davvero rendere una casa eco-sostenibile?\\n\\n" +
+                "Primo passo: Coibentazione. Una casa ben isolata trattiene il calore d''inverno e il fresco d''estate, riducendo la necessità di riscaldamento e condizionamento. " +
+                "Secondo passo: Infissi efficienti. Sostituire i vecchi vetri singoli con doppi o tripli vetri a taglio termico fa una differenza enorme sulla bolletta.\\n\\n" +
+                "Terzo passo: Illuminazione. Le lampadine a LED consumano fino all''85% in meno rispetto alle vecchie lampadine a incandescenza e durano molto più a lungo. " +
+                "Quarto passo: Elettrodomestici di classe A. Scegliere prodotti con alta efficienza energetica garantisce un risparmio costante nel tempo.\\n\\n" +
+                "Quinto passo: Energie rinnovabili. Se possibile, installare pannelli fotovoltaici o sistemi solari termici per l''acqua calda. " +
+                "Oggi esistono anche soluzioni per chi vive in appartamento, come i pannelli da balcone plug-and-play.\\n\\n" +
+                "Sesto passo: Gestione dell''acqua. Installare riduttori di flusso sui rubinetti e sciacquoni a doppio tasto permette di risparmiare migliaia di litri d''acqua ogni anno. " +
+                "Ricorda: ogni piccolo gesto conta per il futuro del pianeta. Iniziare a piccoli passi è meglio che non iniziare affatto.', 8);");
 
         // --- QUIZ DI ESEMPIO (Giorno 1) ---
         db.execSQL("INSERT INTO " + T_QUIZ + " (id, title, category, difficulty, points, numQuestions) VALUES " +

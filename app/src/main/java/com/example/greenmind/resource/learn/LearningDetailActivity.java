@@ -23,15 +23,8 @@ public class LearningDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(this, LearnActivity.class);
-            startActivity(intent);
+            finish();
         });
-
-//        setSupportActionBar(binding.toolbar);
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            getSupportActionBar().setTitle("");
-//        }
 
         dao = new LearningContentDao(this);
 
@@ -49,9 +42,14 @@ public class LearningDetailActivity extends AppCompatActivity {
             binding.txtDetailTitle.setText(item.getTitle());
             binding.txtDetailCategory.setText(item.getCategory());
             binding.txtDetailTime.setText("Tempo di lettura: " + item.getReadingTimeMin() + " min");
-            binding.txtDetailContent.setText(item.getContent());
+            
+            // Gestione dei caratteri a capo (\n) che arrivano dal database
+            String content = item.getContent();
+            if (content != null) {
+                content = content.replace("\\n", "\n");
+            }
+            binding.txtDetailContent.setText(content);
 
-            // binding.imgDetailCover.setImageResource(...)
         } else {
             finish();
         }

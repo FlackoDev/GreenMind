@@ -66,8 +66,10 @@ public class RegisterFragment extends Fragment {
             return;
         }
 
-        if (TextUtils.isEmpty(password)) {
-            binding.passwordEditText.setError("Inserisci una password");
+        // VALIDAZIONE PASSWORD ATTIVATA
+        if (!SecurityUtils.isValidPassword(password)) {
+            binding.passwordEditText.setError("La password deve avere almeno 8 caratteri, una maiuscola, un numero e un simbolo");
+            Toast.makeText(getContext(), "Password troppo debole", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -80,7 +82,6 @@ public class RegisterFragment extends Fragment {
 
         if (id > 0) {
             Toast.makeText(getContext(), "Registrazione completata con successo! Ora effettua il login.", Toast.LENGTH_LONG).show();
-            // Torna al login invece di entrare direttamente
             NavHostFragment.findNavController(this).navigate(R.id.action_registerFragment_to_loginFragment);
         } else {
             Toast.makeText(getContext(), "Errore tecnico durante la registrazione", Toast.LENGTH_SHORT).show();
