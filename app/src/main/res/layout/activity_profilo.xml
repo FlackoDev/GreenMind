@@ -312,31 +312,32 @@
 
                     <!-- Activity chart -->
                     <LinearLayout
+                        android:id="@+id/chart_container"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_marginTop="16dp"
                         android:orientation="horizontal">
                         
                         <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                            <View android:layout_width="24dp" android:layout_height="40dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
+                            <View android:id="@+id/bar_mon" android:layout_width="24dp" android:layout_height="10dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
                         </FrameLayout>
                         <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                            <View android:layout_width="24dp" android:layout_height="60dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_primary" />
+                            <View android:id="@+id/bar_tue" android:layout_width="24dp" android:layout_height="10dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
                         </FrameLayout>
                         <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                            <View android:layout_width="24dp" android:layout_height="30dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
+                            <View android:id="@+id/bar_wed" android:layout_width="24dp" android:layout_height="10dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
                         </FrameLayout>
                         <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                            <View android:layout_width="24dp" android:layout_height="80dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_primary" />
+                            <View android:id="@+id/bar_thu" android:layout_width="24dp" android:layout_height="10dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
                         </FrameLayout>
                         <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                            <View android:layout_width="24dp" android:layout_height="50dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
+                            <View android:id="@+id/bar_fri" android:layout_width="24dp" android:layout_height="10dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
                         </FrameLayout>
                         <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                            <View android:layout_width="24dp" android:layout_height="20dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
+                            <View android:id="@+id/bar_sat" android:layout_width="24dp" android:layout_height="10dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
                         </FrameLayout>
                         <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                            <View android:layout_width="24dp" android:layout_height="10dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
+                            <View android:id="@+id/bar_sun" android:layout_width="24dp" android:layout_height="10dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/weekly_bar_background_light" />
                         </FrameLayout>
                     </LinearLayout>
                     

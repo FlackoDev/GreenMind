@@ -29,10 +29,24 @@ public class LeaderboardEntry {
     
     public String getInitials() {
         if (userName == null || userName.isEmpty()) return "??";
-        String[] parts = userName.trim().split("\\s+");
+        
+        String trimmedName = userName.trim();
+        if (trimmedName.isEmpty()) return "??";
+        
+        String[] parts = trimmedName.split("\\s+");
         if (parts.length >= 2) {
-            return (parts[0].substring(0, 1) + parts[1].substring(0, 1)).toUpperCase();
+            String p1 = parts[0];
+            String p2 = parts[1];
+            if (!p1.isEmpty() && !p2.isEmpty()) {
+                return (p1.substring(0, 1) + p2.substring(0, 1)).toUpperCase();
+            }
         }
-        return userName.substring(0, Math.min(2, userName.length())).toUpperCase();
+        
+        // Se c'è solo un nome o un problema con le parti, prendi le prime due lettere
+        if (trimmedName.length() >= 2) {
+            return trimmedName.substring(0, 2).toUpperCase();
+        } else {
+            return trimmedName.toUpperCase();
+        }
     }
 }

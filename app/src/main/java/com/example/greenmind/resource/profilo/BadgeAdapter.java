@@ -34,15 +34,25 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
         holder.binding.textBadgeName.setText(badge.getName());
         
         if (badge.isSpecial()) {
-            // Grayscale style for "Vedi tutti"
+            // "Vedi tutti" button
             holder.binding.badgeIconContainer.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E0E0E0")));
             holder.binding.imageBadgeIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#757575")));
             holder.binding.imageBadgeIcon.setImageResource(R.drawable.ic_book);
+            holder.binding.getRoot().setAlpha(1.0f);
         } else {
-            // Default badge style (matching item_badge.xml defaults)
-            holder.binding.badgeIconContainer.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFF9C4")));
+            // Default badge style
             int trophyYellow = ContextCompat.getColor(holder.itemView.getContext(), R.color.trophy_yellow);
-            holder.binding.imageBadgeIcon.setImageTintList(ColorStateList.valueOf(trophyYellow));
+            
+            if (badge.isUnlocked()) {
+                holder.binding.badgeIconContainer.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFF9C4")));
+                holder.binding.imageBadgeIcon.setImageTintList(ColorStateList.valueOf(trophyYellow));
+                holder.binding.getRoot().setAlpha(1.0f);
+            } else {
+                // Locked style: Grayscale and semi-transparent
+                holder.binding.badgeIconContainer.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EEEEEE")));
+                holder.binding.imageBadgeIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#BDBDBD")));
+                holder.binding.getRoot().setAlpha(0.5f);
+            }
             holder.binding.imageBadgeIcon.setImageResource(R.drawable.ic_classifica);
         }
     }

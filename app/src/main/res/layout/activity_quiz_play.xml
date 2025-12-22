@@ -44,7 +44,7 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -74,10 +74,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:orientation="vertical">
-                <!-- Le opzioni verranno aggiunte dinamicamente o tramite item fissi -->
+                <!-- Le opzioni verranno aggiunte dinamicamente -->
             </LinearLayout>
 
-            <!-- Box Spiegazione (Inizialmente Nascosto) -->
+            <!-- Box Spiegazione -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_explanation"
                 android:layout_width="match_parent"
@@ -115,7 +115,7 @@
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Bottone Prossima Domanda -->
     <com.google.android.material.button.MaterialButton
@@ -128,6 +128,8 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:enabled="false"
+        android:backgroundTint="@color/green_primary"
+        android:textColor="@color/white"
         app:cornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 

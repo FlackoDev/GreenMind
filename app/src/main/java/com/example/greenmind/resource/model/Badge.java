@@ -6,6 +6,7 @@ public class Badge {
     private String description;
     private int requiredPoints;
     private boolean isSpecial;
+    private boolean isUnlocked;
 
     public Badge() {}
 
@@ -15,12 +16,14 @@ public class Badge {
         this.description = description;
         this.requiredPoints = requiredPoints;
         this.isSpecial = false;
+        this.isUnlocked = false;
     }
 
     public Badge(int id, String name, boolean isSpecial) {
         this.id = id;
         this.name = name;
         this.isSpecial = isSpecial;
+        this.isUnlocked = true;
     }
 
     public int getId() { return id; }
@@ -37,4 +40,7 @@ public class Badge {
 
     public boolean isSpecial() { return isSpecial; }
     public void setSpecial(boolean special) { isSpecial = special; }
+
+    public boolean isUnlocked() { return isUnlocked; }
+    public void setUnlocked(boolean unlocked) { isUnlocked = unlocked; }
 }
