@@ -47,6 +47,10 @@ public class UserStatsDao {
             return s;
         }
         if (c != null) c.close();
-        return new UserStats(userId, 0, 0, 0);
+        
+        // Se non esistono, le creiamo forzatamente per evitare errori futuri
+        UserStats newStats = new UserStats(userId, 0, 0, 0);
+        upsert(newStats);
+        return newStats;
     }
 }

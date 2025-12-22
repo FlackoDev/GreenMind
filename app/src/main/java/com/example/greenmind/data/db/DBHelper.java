@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 11;
+    public static final int DB_VERSION = 13; // Incrementato per aggiornamento contenuti
 
     // ----- TABLE NAMES -----
     public static final String T_QUIZ = "Quiz";
@@ -58,6 +58,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY, " +
                 "title TEXT NOT NULL, " +
                 "category TEXT, " +
+                "preview TEXT, " +
+                "content TEXT, " +
                 "readingTimeMin INTEGER NOT NULL DEFAULT 0" +
                 ");");
 
@@ -137,6 +139,13 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + T_USER + " (id, name, email, passwordHash, createdAt) VALUES " +
                 "(1, 'Ale', 'ale@gmail.com', '" + hashedPw + "', " + now + ");");
         db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (1, 0, 0, 0);");
+
+        // --- LEARNING CONTENTS ---
+        db.execSQL("INSERT INTO " + T_LEARNING_CONTENT + " (id, title, category, preview, content, readingTimeMin) VALUES " +
+                "(1, 'L''arte del riciclo creativo', 'Sostenibilità', 'Scopri come trasformare i rifiuti in oggetti utili.', " +
+                "'Il riciclo creativo è una pratica che permette di dare nuova vita a oggetti che altrimenti finirebbero in discarica. Oltre a ridurre l''inquinamento, stimola la creatività.', 5), " +
+                "(2, 'Energia Rinnovabile in Casa', 'Ambiente', 'Piccoli passi per ridurre l''impatto energetico domestico.', " +
+                "'L''utilizzo di pannelli solari e lampadine a LED può ridurre drasticamente il consumo di energia elettrica. La sostenibilità parte dalle mura di casa nostra.', 8);");
 
         // --- QUIZ DI ESEMPIO (Giorno 1) ---
         db.execSQL("INSERT INTO " + T_QUIZ + " (id, title, category, difficulty, points, numQuestions) VALUES " +

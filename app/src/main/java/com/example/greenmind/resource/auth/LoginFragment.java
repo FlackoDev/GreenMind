@@ -41,10 +41,17 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Se già loggato, vai alla home direttamente
+        // Se già loggato, verifica che l'utente esista ancora nel database
         if (sessionManager.isLoggedIn()) {
-            navigateToHome();
-            return;
+            int userId = sessionManager.getUserId();
+            if (userDao.userExists(userId)) {
+                navigateToHome();
+                return;
+            } else {
+                // Sessione orfana (utente rimosso o DB pulito): puliamo la sessione
+                sessionManager.logout();
+                Toast.makeText(getContext(), "Sessione scaduta o non valida", Toast.LENGTH_SHORT).show();
+            }
         }
 
         emailEditText = view.findViewById(R.id.emailEditText);
@@ -118,7 +125,6 @@ public class LoginFragment extends Fragment {
     }
 
     private void navigateToHome() {
-        // Usiamo un Intent con flag per pulire lo stack ed evitare di poter tornare indietro al login
         Intent intent = new Intent(requireContext(), HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

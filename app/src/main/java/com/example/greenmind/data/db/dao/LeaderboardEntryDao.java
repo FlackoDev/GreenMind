@@ -24,15 +24,16 @@ public class LeaderboardEntryDao {
         List<LeaderboardEntry> list = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        // Query che unisce User e UserStats per avere nomi e punti totali
-        String query = "SELECT u.id, u.name, s.totalPoints " +
+        // Query che unisce User e UserStats con LEFT JOIN per non escludere utenti senza statistiche
+        // COALESCE gestisce il caso in cui totalPoints sia NULL (utente appena creato o dati corrotti)
+        String query = "SELECT u.id, u.name, COALESCE(s.totalPoints, 0) as totalPoints " +
                 "FROM " + DBHelper.T_USER + " u " +
-                "JOIN " + DBHelper.T_USER_STATS + " s ON u.id = s.userId " +
-                "ORDER BY s.totalPoints DESC";
+                "LEFT JOIN " + DBHelper.T_USER_STATS + " s ON u.id = s.userId " +
+                "ORDER BY totalPoints DESC";
 
         Cursor cursor = db.rawQuery(query, null);
         int pos = 1;
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             do {
                 list.add(new LeaderboardEntry(
                         cursor.getInt(cursor.getColumnIndex("id")),
@@ -42,7 +43,7 @@ public class LeaderboardEntryDao {
                 ));
             } while (cursor.moveToNext());
         }
-        cursor.close();
+        if (cursor != null) cursor.close();
         return list;
     }
 }

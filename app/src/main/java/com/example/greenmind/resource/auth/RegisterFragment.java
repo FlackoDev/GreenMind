@@ -56,34 +56,21 @@ public class RegisterFragment extends Fragment {
         String email = binding.emailEditText.getText().toString().trim();
         String password = binding.passwordEditText.getText().toString().trim();
 
-        // 1. Controllo campi vuoti
         if (TextUtils.isEmpty(name)) {
             binding.nameEditText.setError("Inserisci il tuo nome");
             return;
         }
 
-        // 2. Validazione Email
         if (!SecurityUtils.isValidEmail(email)) {
             binding.emailEditText.setError("Inserisci un'email valida");
             return;
         }
 
-        // 3. Validazione Password (Robustezza) - COMMENTATA PER SVILUPPO
-        /*
-        if (!SecurityUtils.isValidPassword(password)) {
-            binding.passwordEditText.setError("La password deve avere almeno 8 caratteri, una maiuscola, un numero e un simbolo");
-            Toast.makeText(getContext(), "Password troppo debole", Toast.LENGTH_LONG).show();
-            return;
-        }
-        */
-        
-        // Controllo minimo per non avere password vuote
         if (TextUtils.isEmpty(password)) {
             binding.passwordEditText.setError("Inserisci una password");
             return;
         }
 
-        // 4. Controllo se l'utente esiste già
         if (userDao.getByEmail(email) != null) {
             binding.emailEditText.setError("Questa email è già registrata");
             return;
@@ -92,7 +79,8 @@ public class RegisterFragment extends Fragment {
         long id = userDao.registerUser(name, email, password);
 
         if (id > 0) {
-            Toast.makeText(getContext(), "Registrazione completata con successo!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Registrazione completata con successo! Ora effettua il login.", Toast.LENGTH_LONG).show();
+            // Torna al login invece di entrare direttamente
             NavHostFragment.findNavController(this).navigate(R.id.action_registerFragment_to_loginFragment);
         } else {
             Toast.makeText(getContext(), "Errore tecnico durante la registrazione", Toast.LENGTH_SHORT).show();
