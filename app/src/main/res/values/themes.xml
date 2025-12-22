@@ -1,13 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.GreenMind" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:colorBackground">@color/white</item>
+        <item name="android:colorBackground">@color/app_background</item>
+        <item name="colorPrimary">@color/green_primary</item>
     </style>
 
     <style name="Theme.GreenMind" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:colorBackground">@color/white</item>
-        <item name="android:statusBarColor">@color/white</item>
-        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:colorBackground">@color/app_background</item>
+        <item name="android:statusBarColor">@color/surface_card</item>
+        <item name="android:navigationBarColor">@color/surface_card</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimary">@color/green_primary</item>
     </style>
 
     <!-- Splash Screen Theme -->
@@ -17,7 +19,6 @@
         <item name="windowSplashScreenAnimationDuration">0</item>
         <item name="postSplashScreenTheme">@style/Theme.GreenMind</item>
         
-        <!-- Queste impostazioni valgono SOLO durante la splash -->
         <item name="android:statusBarColor">@color/green_primary</item>
         <item name="android:navigationBarColor">@color/green_primary</item>
         <item name="android:windowLightStatusBar">false</item>

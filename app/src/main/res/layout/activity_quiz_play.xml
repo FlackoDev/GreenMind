@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/app_background"
     tools:context="com.example.greenmind.resource.quiz.QuizPlayActivity">
 
     <!-- Header con Freccia Indietro e Progresso -->
@@ -23,7 +23,7 @@
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/black" />
+            app:tint="@color/text_primary" />
 
         <ProgressBar
             android:id="@+id/quiz_progress_bar"
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1/2"
-            android:textColor="@color/gray_600"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Dove va gettato un bicchiere di vetro rotto?"
-                android:textColor="@color/black"
+                android:textColor="@color/text_primary"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -84,10 +84,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:visibility="gone"
-                app:cardBackgroundColor="#F0F7FF"
+                app:cardBackgroundColor="@color/quick_quiz_background"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#D1E4F9"
+                app:strokeColor="@color/quick_action_stroke"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -100,7 +100,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Spiegazione:"
-                        android:textColor="#1976D2"
+                        android:textColor="@color/green_primary"
                         android:textStyle="bold" />
 
                     <TextView
@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Il vetro cristallo o pyrex..."
-                        android:textColor="#1976D2"
+                        android:textColor="@color/text_secondary"
                         android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -129,7 +129,7 @@
         android:textStyle="bold"
         android:enabled="false"
         android:backgroundTint="@color/green_primary"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         app:cornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 

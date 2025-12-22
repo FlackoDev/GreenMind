@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    android:background="@android:color/white">
+    android:background="@color/app_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:contentDescription="Torna indietro"
             android:padding="8dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@android:color/black"/>
+            app:tint="@color/text_primary"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:text="Aggiungi nuovo Quiz"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="24dp"/>
 
         <!-- Dati Generali del Quiz -->
@@ -37,16 +37,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/input_layout_stroke_color"
+            app:hintTextColor="@color/green_primary"
             app:boxCornerRadiusTopStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_quiz_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Titolo del Quiz (es. Riciclo Creativo)"
+                android:textColor="@color/text_primary"
                 android:inputType="text"
                 android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -56,16 +59,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/input_layout_stroke_color"
+            app:hintTextColor="@color/green_primary"
             app:boxCornerRadiusTopStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_quiz_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Categoria (es. Ambiente)"
+                android:textColor="@color/text_primary"
                 android:inputType="text"
                 android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -75,16 +81,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/input_layout_stroke_color"
+            app:hintTextColor="@color/green_primary"
             app:boxCornerRadiusTopStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_quiz_points"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Punti assegnati (es. 100)"
+                android:textColor="@color/text_primary"
                 android:inputType="number"
                 android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -92,17 +101,17 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#DDDDDD"
+            android:background="@color/divider_color"
             android:layout_marginBottom="24dp"/>
 
-        <!-- Sezione Domanda di esempio (semplificata per il progetto) -->
+        <!-- Sezione Domanda di esempio -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Configura una Domanda"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="16dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -110,16 +119,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/input_layout_stroke_color"
+            app:hintTextColor="@color/green_primary"
             app:boxCornerRadiusTopStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_question_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Testo della domanda"
+                android:textColor="@color/text_primary"
                 android:inputType="textMultiLine"
                 android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -129,16 +141,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/input_layout_stroke_color"
+            app:hintTextColor="@color/green_primary"
             app:boxCornerRadiusTopStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_correct_answer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Risposta CORRETTA"
+                android:textColor="@color/text_primary"
                 android:inputType="text"
                 android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -148,16 +163,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/input_layout_stroke_color"
+            app:hintTextColor="@color/green_primary"
             app:boxCornerRadiusTopStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_wrong_answer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Risposta SBAGLIATA"
+                android:textColor="@color/text_primary"
                 android:inputType="text"
                 android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -167,16 +185,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/input_layout_stroke_color"
+            app:hintTextColor="@color/green_primary"
             app:boxCornerRadiusTopStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_explanation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Spiegazione della risposta"
+                android:textColor="@color/text_primary"
                 android:inputType="textMultiLine"
                 android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>

@@ -16,6 +16,7 @@ public class SessionManager {
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_USER_EMAIL = "user_email";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
+    private static final String KEY_DARK_MODE = "dark_mode";
     
     // Sicurezza Globale
     private static final String KEY_GLOBAL_FAILED_ATTEMPTS = "global_failed_attempts";
@@ -73,6 +74,15 @@ public class SessionManager {
     public void logout() {
         editor.clear();
         editor.apply();
+    }
+
+    public void setDarkMode(boolean isEnabled) {
+        editor.putBoolean(KEY_DARK_MODE, isEnabled);
+        editor.apply();
+    }
+
+    public boolean isDarkMode() {
+        return sharedPreferences.getBoolean(KEY_DARK_MODE, false);
     }
 
     // --- Gestione Blocco Globale ---

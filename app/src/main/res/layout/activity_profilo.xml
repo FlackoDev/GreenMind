@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7F9"
+    android:background="@color/app_background"
     tools:context="com.example.greenmind.resource.profilo.ProfiloActivity">
 
     <ScrollView
@@ -33,7 +33,7 @@
                 app:cardCornerRadius="24dp"
                 app:cardElevation="12dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/surface_card"
                 app:cardMaxElevation="16dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +44,7 @@
                         android:id="@+id/header_top_background"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:background="#E8F5E9"
+                        android:background="@color/header_background"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <!-- Overlaid Buttons Card -->
@@ -71,7 +71,6 @@
                                 android:id="@+id/btn_settings"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:padding="6dp"
@@ -83,13 +82,12 @@
                                 android:layout_width="1dp"
                                 android:layout_height="20dp"
                                 android:layout_marginHorizontal="2dp"
-                                android:background="#DDDDDD" />
+                                android:background="@color/divider_color" />
 
                             <ImageView
                                 android:id="@+id/btn_logout"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:padding="6dp"
@@ -118,7 +116,7 @@
                             android:background="@drawable/profile_background_selector"
                             android:gravity="center"
                             android:text="JD"
-                            android:textColor="@color/white"
+                            android:textColor="@android:color/white"
                             android:textSize="32sp"
                             android:textStyle="bold" />
                     </com.google.android.material.card.MaterialCardView>
@@ -131,7 +129,7 @@
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="2dp"
                         android:text="LV. 5"
-                        android:textColor="@color/white"
+                        android:textColor="@android:color/white"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:elevation="10dp"
@@ -148,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="John Doe"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_primary"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -175,7 +173,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="24dp"
                         android:text="Membro dal 2024"
-                        android:textColor="#888888"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -203,7 +201,7 @@
                     app:cardCornerRadius="16dp"
                     app:cardElevation="6dp"
                     app:strokeWidth="0dp"
-                    app:cardBackgroundColor="@color/white">
+                    app:cardBackgroundColor="@color/surface_card">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -217,7 +215,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1250"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_primary"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -225,7 +223,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="PUNTI TOTALI"
-                            android:textColor="#888888"
+                            android:textColor="@color/text_secondary"
                             android:textSize="10sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -238,7 +236,7 @@
                     app:cardCornerRadius="16dp"
                     app:cardElevation="6dp"
                     app:strokeWidth="0dp"
-                    app:cardBackgroundColor="@color/white">
+                    app:cardBackgroundColor="@color/surface_card">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -252,7 +250,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="42"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_primary"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -260,7 +258,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="QUIZ FATTI"
-                            android:textColor="#888888"
+                            android:textColor="@color/text_secondary"
                             android:textSize="10sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -277,7 +275,7 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="6dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@color/surface_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -293,7 +291,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Attività Settimanale"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_primary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -346,13 +344,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="L" android:gravity="center" android:textColor="#BBBBBB" android:textSize="10sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="M" android:gravity="center" android:textColor="#BBBBBB" android:textSize="10sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="M" android:gravity="center" android:textColor="#BBBBBB" android:textSize="10sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="G" android:gravity="center" android:textColor="#BBBBBB" android:textSize="10sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="V" android:gravity="center" android:textColor="#BBBBBB" android:textSize="10sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="S" android:gravity="center" android:textColor="#BBBBBB" android:textSize="10sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="D" android:gravity="center" android:textColor="#BBBBBB" android:textSize="10sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="L" android:gravity="center" android:textColor="@color/text_tertiary" android:textSize="10sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="M" android:gravity="center" android:textColor="@color/text_tertiary" android:textSize="10sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="M" android:gravity="center" android:textColor="@color/text_tertiary" android:textSize="10sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="G" android:gravity="center" android:textColor="@color/text_tertiary" android:textSize="10sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="V" android:gravity="center" android:textColor="@color/text_tertiary" android:textSize="10sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="S" android:gravity="center" android:textColor="@color/text_tertiary" android:textSize="10sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="D" android:gravity="center" android:textColor="@color/text_tertiary" android:textSize="10sp"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -364,7 +362,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="I tuoi Badge"
-                android:textColor="@color/black"
+                android:textColor="@color/text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -375,8 +373,7 @@
                 android:layout_marginTop="8dp"
                 android:clipToPadding="false"
                 android:clipChildren="false"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_badge" />
 
         </LinearLayout>

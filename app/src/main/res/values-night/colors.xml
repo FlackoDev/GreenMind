@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Semantic Colors (Dark Mode) -->
+    <color name="app_background">#121212</color>
+    <color name="surface_card">#1E1E1E</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#BDBDBD</color>
+    <color name="text_tertiary">#757575</color>
+    <color name="divider_color">#333333</color>
+    <color name="icon_tint">#BDBDBD</color>
+    <color name="header_background">#1B5E20</color>
+    <color name="input_background">#2C2C2C</color>
+
+    <!-- Feedback Colors (Dark Mode) -->
+    <color name="correct_background">#1B5E20</color>
+    <color name="correct_stroke">#4CAF50</color>
+    <color name="correct_text">#A5D6A7</color>
+    <color name="wrong_background">#B71C1C</color>
+    <color name="wrong_stroke">#F44336</color>
+    <color name="wrong_text">#FFCDD2</color>
+
+    <!-- Compatibility colors -->
+    <color name="white">#1E1E1E</color>
+    <color name="black">#FFFFFF</color>
+    <color name="gray_600">#BDBDBD</color>
+    <color name="gray_400">#757575</color>
+
+    <!-- Adjusted for Dark Mode contrast -->
+    <color name="weather_alert_background">#2C1A1A</color>
+    <color name="weather_alert_text">#FF8A80</color>
+    <color name="quick_action_stroke">#333333</color>
+    <color name="quick_quiz_background">#1A237E</color>
+    <color name="read_article_background">#3E2723</color>
+    <color name="light_green_bg">#1B5E20</color>
+</resources>

@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="Quiz Disponibili"
-        android:textColor="@color/black"
+        android:textColor="@color/text_primary"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

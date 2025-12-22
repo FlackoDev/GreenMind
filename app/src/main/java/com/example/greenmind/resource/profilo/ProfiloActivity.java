@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.greenmind.MainActivity;
 import com.example.greenmind.R;
@@ -40,6 +40,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private UserStatsDao userStatsDao;
     private QuizResultDao quizResultDao;
     private BadgeDao badgeDao;
+    private BadgeAdapter badgeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,12 +186,9 @@ public class ProfiloActivity extends AppCompatActivity {
         
         binding.textRank.setText(highestBadgeName);
 
-        // Aggiungiamo il tasto speciale alla fine
-        allBadges.add(new Badge(99, "VEDI\nTUTTI", true));
-
-        BadgeAdapter adapter = new BadgeAdapter(allBadges);
-        binding.recyclerBadges.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.recyclerBadges.setAdapter(adapter);
+        badgeAdapter = new BadgeAdapter(allBadges);
+        binding.recyclerBadges.setLayoutManager(new GridLayoutManager(this, 3));
+        binding.recyclerBadges.setAdapter(badgeAdapter);
     }
 
     private String getInitials(String name) {

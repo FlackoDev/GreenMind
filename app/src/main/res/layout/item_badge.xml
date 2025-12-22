@@ -45,5 +45,15 @@
             android:textAllCaps="true"
             android:lineSpacingExtra="1dp" />
 
+        <TextView
+            android:id="@+id/text_badge_points"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="0 pts"
+            android:textColor="@color/gray_600"
+            android:textSize="9sp" />
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

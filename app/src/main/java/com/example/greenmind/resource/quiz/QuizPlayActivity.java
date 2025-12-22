@@ -2,13 +2,14 @@ package com.example.greenmind.resource.quiz;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.example.greenmind.R;
 import com.example.greenmind.data.auth.SessionManager;
 import com.example.greenmind.data.db.DBHelper;
 import com.example.greenmind.data.db.dao.AnswerOptionDao;
@@ -107,7 +108,7 @@ public class QuizPlayActivity extends AppCompatActivity {
     private void addOptionView(AnswerOption option) {
         ItemAnswerOptionBinding optionBinding = ItemAnswerOptionBinding.inflate(LayoutInflater.from(this), binding.layoutOptions, false);
         optionBinding.textOption.setText(option.getText());
-        optionBinding.getRoot().setTag(option); // Salviamo l'oggetto nel tag per recuperarlo dopo
+        optionBinding.getRoot().setTag(option);
 
         if (isViewOnly) {
             if (option.isCorrect()) {
@@ -146,22 +147,22 @@ public class QuizPlayActivity extends AppCompatActivity {
             View v = binding.layoutOptions.getChildAt(i);
             AnswerOption opt = (AnswerOption) v.getTag();
             if (opt != null && opt.isCorrect()) {
-                // Trovata la corretta, la evidenziamo
-                v.setBackgroundColor(Color.parseColor("#E8F5E9")); // Sfondo leggero verde
+                ItemAnswerOptionBinding b = ItemAnswerOptionBinding.bind(v);
+                styleOptionCorrect(b);
             }
         }
     }
 
     private void styleOptionCorrect(ItemAnswerOptionBinding b) {
-        b.cardOption.setStrokeColor(Color.parseColor("#4CAF50"));
-        b.cardOption.setCardBackgroundColor(Color.parseColor("#E8F5E9"));
-        b.textOption.setTextColor(Color.parseColor("#2E7D32"));
+        b.cardOption.setStrokeColor(ContextCompat.getColor(this, R.color.correct_stroke));
+        b.cardOption.setCardBackgroundColor(ContextCompat.getColor(this, R.color.correct_background));
+        b.textOption.setTextColor(ContextCompat.getColor(this, R.color.correct_text));
     }
 
     private void styleOptionWrong(ItemAnswerOptionBinding b) {
-        b.cardOption.setStrokeColor(Color.parseColor("#F44336"));
-        b.cardOption.setCardBackgroundColor(Color.parseColor("#FFEBEE"));
-        b.textOption.setTextColor(Color.parseColor("#C62828"));
+        b.cardOption.setStrokeColor(ContextCompat.getColor(this, R.color.wrong_stroke));
+        b.cardOption.setCardBackgroundColor(ContextCompat.getColor(this, R.color.wrong_background));
+        b.textOption.setTextColor(ContextCompat.getColor(this, R.color.wrong_text));
     }
 
     private void handleNextButtonClick() {
@@ -192,7 +193,6 @@ public class QuizPlayActivity extends AppCompatActivity {
 
         db.beginTransaction();
         try {
-            // 1. Salva in QuizResult
             ContentValues cvResult = new ContentValues();
             cvResult.put("userId", userId);
             cvResult.put("quizId", currentQuiz.getId());
@@ -200,7 +200,6 @@ public class QuizPlayActivity extends AppCompatActivity {
             cvResult.put("date", now);
             db.insert(DBHelper.T_QUIZ_RESULT, null, cvResult);
 
-            // 2. Upsert nelle statistiche (Assicurati che esista e aggiorna)
             db.execSQL("INSERT OR IGNORE INTO " + DBHelper.T_USER_STATS + 
                        " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (" + userId + ", 0, 0, 0)");
             

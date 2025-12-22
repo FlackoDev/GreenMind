@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
+    android:background="@color/app_background"
     tools:context=".resource.auth.LoginFragment">
 
     <!-- Logo dell'applicazione -->
@@ -38,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Bentornato!"
-        android:textColor="@android:color/black"
+        android:textColor="@color/text_primary"
         android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/subtitleTextView"
@@ -53,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Accedi per continuare la tua missione green."
+        android:textColor="@color/text_secondary"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/emailTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,23 +69,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:hint="Email"
-        app:boxBackgroundColor="#F3F3F3"
+        app:boxBackgroundColor="@color/input_background"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
+        app:hintTextColor="@color/green_primary"
         app:layout_constraintBottom_toTopOf="@+id/passwordTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtitleTextView"
-        app:startIconDrawable="@drawable/ic_email">
+        app:startIconDrawable="@drawable/ic_email"
+        app:startIconTint="@color/green_primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
             android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -96,24 +101,28 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Password"
-        app:boxBackgroundColor="#F3F3F3"
+        app:boxBackgroundColor="@color/input_background"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
+        app:hintTextColor="@color/green_primary"
         app:layout_constraintBottom_toTopOf="@+id/forgotPasswordTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailTextInputLayout"
         app:passwordToggleEnabled="true"
-        app:startIconDrawable="@drawable/ic_password">
+        app:passwordToggleTint="@color/green_primary"
+        app:startIconDrawable="@drawable/ic_password"
+        app:startIconTint="@color/green_primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
             android:imeOptions="actionDone"
             android:inputType="textPassword" />
 
@@ -139,7 +148,7 @@
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/green_primary"
         android:text="Accedi"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/registerSection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -161,6 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/non_hai_un_account"
+            android:textColor="@color/text_secondary"
             android:textSize="16sp" />
 
         <TextView
@@ -170,6 +180,7 @@
             android:text="@string/registrati"
             android:textColor="@color/green_primary"
             android:textSize="16sp"
+            android:layout_marginStart="4dp"
             android:textStyle="bold" />
 
     </LinearLayout>
