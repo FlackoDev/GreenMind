@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".GreenMindApp"
         android:allowBackup="true"
@@ -53,7 +55,6 @@
             android:theme="@style/Theme.GreenMind"
             android:label="Impostazioni" />
 
-
         <activity
             android:name=".resource.learn.AddLearningContentActivity"
             android:theme="@style/Theme.GreenMind"
@@ -61,6 +62,12 @@
         <activity
             android:name=".resource.learn.LearningDetailActivity"
             android:theme="@style/Theme.GreenMind"
+            android:exported="false" />
+            
+        <activity 
+            android:name=".resource.chat.ChatActivity"
+            android:theme="@style/Theme.GreenMind"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
     </application>
 

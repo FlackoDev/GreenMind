@@ -25,6 +25,7 @@ public class QuizActivity extends AppCompatActivity {
     private QuizDao quizDao;
     private QuizManager quizManager;
     private SessionManager sessionManager;
+    private boolean isSpeedDialVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +39,36 @@ public class QuizActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         setupBottomNavigation();
-        
-        binding.btnAddQuiz.setOnClickListener(v -> {
+        setupSpeedDial();
+    }
+
+    private void setupSpeedDial() {
+        binding.btnMainFab.setOnClickListener(v -> toggleSpeedDial());
+
+        binding.fabAddAction.setOnClickListener(v -> {
+            toggleSpeedDial();
             startActivity(new Intent(this, AddQuizActivity.class));
         });
+
+        binding.fabGeminiAction.setOnClickListener(v -> {
+            toggleSpeedDial();
+            // Intent intent = new Intent(this, ChatActivity.class);
+            // startActivity(intent);
+        });
+    }
+
+    private void toggleSpeedDial() {
+        if (!isSpeedDialVisible) {
+            binding.fabAddAction.show();
+            binding.fabGeminiAction.show();
+            binding.btnMainFab.setRotation(45f);
+            isSpeedDialVisible = true;
+        } else {
+            binding.fabAddAction.hide();
+            binding.fabGeminiAction.hide();
+            binding.btnMainFab.setRotation(0f);
+            isSpeedDialVisible = false;
+        }
     }
 
     @Override

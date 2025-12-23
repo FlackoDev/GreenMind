@@ -21,6 +21,7 @@ public class LearnActivity extends AppCompatActivity {
     private ActivityLearnBinding binding;
     private LearningContentAdapter adapter;
     private LearningContentDao learningContentDao;
+    private boolean isSpeedDialVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +31,39 @@ public class LearnActivity extends AppCompatActivity {
 
         setupBottomNavigation();
         setupRecycler();
-        binding.btnAddContent.setOnClickListener(v -> {
+        setupSpeedDial();
+
+        learningContentDao = new LearningContentDao(this);
+    }
+
+    private void setupSpeedDial() {
+        binding.btnMainFab.setOnClickListener(v -> toggleSpeedDial());
+
+        binding.fabAddAction.setOnClickListener(v -> {
+            toggleSpeedDial();
             Intent intent = new Intent(this, AddLearningContentActivity.class);
             startActivity(intent);
         });
 
-        learningContentDao = new LearningContentDao(this);
+        binding.fabGeminiAction.setOnClickListener(v -> {
+            toggleSpeedDial();
+            // Intent intent = new Intent(this, ChatActivity.class);
+            // startActivity(intent);
+        });
+    }
+
+    private void toggleSpeedDial() {
+        if (!isSpeedDialVisible) {
+            binding.fabAddAction.show();
+            binding.fabGeminiAction.show();
+            binding.btnMainFab.setRotation(45f);
+            isSpeedDialVisible = true;
+        } else {
+            binding.fabAddAction.hide();
+            binding.fabGeminiAction.hide();
+            binding.btnMainFab.setRotation(0f);
+            isSpeedDialVisible = false;
+        }
     }
 
     @Override

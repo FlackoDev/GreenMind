@@ -53,18 +53,54 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_learning_content" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_add_content"
+    <!-- SPEED DIAL UI -->
+    <LinearLayout
+        android:id="@+id/speed_dial_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_add"
-        app:tint="@android:color/white"
-        app:backgroundTint="@color/green_primary"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="end"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-        android:contentDescription="Aggiungi contenuto" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Mini FAB per Gemini -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_gemini_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_ai_gemini"
+            android:visibility="gone"
+            app:backgroundTint="@color/green_primary"
+            app:fabSize="mini"
+            app:tint="@android:color/white"
+            tools:visibility="visible" />
+
+        <!-- Mini FAB per Aggiungi -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_add"
+            android:visibility="gone"
+            app:backgroundTint="@color/green_primary"
+            app:fabSize="mini"
+            app:tint="@android:color/white"
+            tools:visibility="visible" />
+
+        <!-- FAB principale -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_main_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            app:backgroundTint="@color/green_primary"
+            app:tint="@android:color/white" />
+
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

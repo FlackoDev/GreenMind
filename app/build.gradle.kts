@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.security.crypto)
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation(libs.recyclerview)
+    implementation(libs.generativeai)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

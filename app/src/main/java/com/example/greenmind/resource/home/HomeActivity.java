@@ -2,13 +2,13 @@ package com.example.greenmind.resource.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.greenmind.R;
 import com.example.greenmind.data.auth.SessionManager;
 import com.example.greenmind.data.repository.QuizManager;
 import com.example.greenmind.databinding.ActivityHomeBinding;
+import com.example.greenmind.resource.chat.ChatActivity;
 import com.example.greenmind.resource.classifica.ClassificaActivity;
 import com.example.greenmind.resource.learn.LearnActivity;
 import com.example.greenmind.resource.model.Quiz;
@@ -43,7 +43,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Ricarica la sfida ogni volta che torni nella Home per aggiornare il tasto
         loadDailyChallenge();
     }
 
@@ -61,7 +60,6 @@ public class HomeActivity extends AppCompatActivity {
             String info = dailyQuiz.getNumQuestions() + " domande - " + dailyQuiz.getPoints() + " punti";
             binding.textChallengeDescription.setText(info);
 
-            // Controlla se è già stato fatto
             isCompleted = quizManager.isQuizCompleted(sessionManager.getUserId(), dailyQuiz.getId());
             
             if (isCompleted) {
@@ -90,12 +88,15 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, LearnActivity.class));
             overridePendingTransition(0, 0);
         });
+
+        binding.fabGemini.setOnClickListener(v -> {
+            startActivity(new Intent(this, ChatActivity.class));
+        });
     }
 
     private void openQuiz() {
         if (dailyQuiz == null) return;
         
-        // Corretto: carichiamo QuizPlayActivity per giocare il quiz del giorno
         Intent intent = new Intent(this, QuizPlayActivity.class);
         intent.putExtra("quiz_id", dailyQuiz.getId());
         intent.putExtra("is_view_only", isCompleted);
