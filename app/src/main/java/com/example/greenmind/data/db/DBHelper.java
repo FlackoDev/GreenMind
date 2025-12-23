@@ -8,7 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 25;
+    public static final int DB_VERSION = 26;
 
     public static final String T_QUIZ = "Quiz";
     public static final String T_QUESTION = "Question";
@@ -53,8 +53,8 @@ public class DBHelper extends SQLiteOpenHelper {
         
         // 2. LEARNING CONTENT
         db.execSQL("INSERT INTO " + T_LEARNING_CONTENT + " (id, title, category, readingTimeMin, preview, content) VALUES " +
-                "(1, 'Come gestire le emergenze climatiche', 'EMERGENZE CLIMATICHE', 5, 'Le ondate di calore e le inondazioni sono sempre più frequenti. Ecco una guida pratica su cosa fare in caso...', 'Le ondate di calore e le inondazioni sono sempre più frequenti...'), " +
-                "(2, 'Guida alla raccolta differenziata', 'GESTIONE RIFIUTI', 3, 'Separare correttamente i rifiuti è il primo passo per un futuro sostenibile. Scopri dove buttare il Tetra Pak e...', 'Separare correttamente i rifiuti è il primo passo...'), " +
+                "(1, 'Come gestire le emergenze climatiche', 'EMERGENZE CLIMATICHE', 5, 'Le ondate di calore e le inondazioni sono sempre più frequenti. Ecco una guida pratica su cosa fare in caso...', 'Le ondate di calore e le inondazioni sono sempre più frequenti a causa del riscaldamento globale. È fondamentale essere preparati.\\n\\nIn caso di ondate di calore:\\n1. Evita di uscire nelle ore più calde (dalle 11 alle 18).\\n2. Bevi molta acqua, anche se non senti sete.\\n3. Mantieni la casa fresca chiudendo le tapparelle durante il giorno.\\n4. Indossa abiti leggeri e di fibre naturali come cotone o lino.\\n\\nIn caso di inondazioni:\\n1. Sali ai piani superiori e non scendere mai in cantina o garage.\\n2. Chiudi l''interruttore generale della corrente elettrica e del gas.\\n3. Segui le istruzioni delle autorità via radio o social media.\\n4. Non tentare di attraversare zone allagate a piedi o in auto, la forza dell''acqua può essere ingannevole.\\n\\nLa prevenzione è la chiave per ridurre i rischi legati ai cambiamenti climatici estremi. Investire in infrastrutture resilienti e informare la popolazione sono passi cruciali per un futuro più sicuro per tutti.'), " +
+                "(2, 'Guida alla raccolta differenziata', 'GESTIONE RIFIUTI', 3, 'Separare correttamente i rifiuti è il primo passo per un futuro sostenibile. Scopri dove buttare il Tetra Pak e...', 'Separare correttamente i rifiuti è il primo passo fondamentale per un futuro sostenibile e per favorire l''economia circolare.\\n\\nEcco alcuni errori comuni da evitare:\\n1. Il Tetra Pak: in molti comuni va con la carta, in altri con la plastica. Controlla sempre le disposizioni locali.\\n2. Scontrini: non vanno nella carta! Sono fatti di carta termica che non è riciclabile con la carta normale. Vanno nel secco residuo.\\n3. Ceramica e Pyrex: non sono vetro! Se rompi un piatto o una pirofila, non metterli nel contenitore del vetro, ma nel secco.\\n4. Plastica sporca: i contenitori per alimenti devono essere svuotati e sciacquati grossolanamente prima di essere riciclati.\\n\\nPerché riciclare?\\nIl riciclo riduce l''estrazione di nuove materie prime, risparmia energia e diminuisce le emissioni di gas serra prodotte dalle discariche. Ogni piccolo gesto conta per proteggere il nostro pianeta. Ricordati che la gerarchia dei rifiuti mette al primo posto la riduzione della produzione di rifiuti stessi, poi il riuso e infine il riciclo.'), " +
                 "(3, 'Il Futuro delle Energie Rinnovabili', 'ENERGIA', 8, 'Sole e vento per il pianeta.', 'Le rinnovabili sono il futuro...'), " +
                 "(4, 'Ridurre lo spreco d''acqua', 'CONSUMI', 4, 'Piccoli gesti, grandi risparmi.', 'Chiudi il rubinetto quando puoi...');");
 
