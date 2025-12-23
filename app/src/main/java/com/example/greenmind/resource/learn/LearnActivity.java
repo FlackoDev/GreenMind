@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.greenmind.R;
 import com.example.greenmind.databinding.ActivityLearnBinding;
+import com.example.greenmind.resource.chat.ChatActivity;
 import com.example.greenmind.resource.classifica.ClassificaActivity;
 import com.example.greenmind.resource.home.HomeActivity;
 import com.example.greenmind.resource.model.LearningContent;
@@ -47,8 +48,8 @@ public class LearnActivity extends AppCompatActivity {
 
         binding.fabGeminiAction.setOnClickListener(v -> {
             toggleSpeedDial();
-            // Intent intent = new Intent(this, ChatActivity.class);
-            // startActivity(intent);
+            ChatActivity chatSheet = new ChatActivity();
+            chatSheet.show(getSupportFragmentManager(), "ChatBottomSheet");
         });
     }
 

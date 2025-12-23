@@ -3,6 +3,7 @@ package com.example.greenmind.resource.chat;
 public class ChatMessage {
     public static final int TYPE_USER = 0;
     public static final int TYPE_GEMINI = 1;
+    public static final int TYPE_TYPING = 2; // Nuovo tipo per l'animazione di caricamento
 
     private String text;
     private int type;

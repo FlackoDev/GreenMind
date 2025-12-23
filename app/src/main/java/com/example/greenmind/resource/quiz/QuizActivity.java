@@ -10,6 +10,7 @@ import com.example.greenmind.data.auth.SessionManager;
 import com.example.greenmind.data.db.dao.QuizDao;
 import com.example.greenmind.data.repository.QuizManager;
 import com.example.greenmind.databinding.ActivityQuizBinding;
+import com.example.greenmind.resource.chat.ChatActivity;
 import com.example.greenmind.resource.classifica.ClassificaActivity;
 import com.example.greenmind.resource.home.HomeActivity;
 import com.example.greenmind.resource.learn.LearnActivity;
@@ -52,8 +53,8 @@ public class QuizActivity extends AppCompatActivity {
 
         binding.fabGeminiAction.setOnClickListener(v -> {
             toggleSpeedDial();
-            // Intent intent = new Intent(this, ChatActivity.class);
-            // startActivity(intent);
+            ChatActivity chatSheet = new ChatActivity();
+            chatSheet.show(getSupportFragmentManager(), "ChatBottomSheet");
         });
     }
 

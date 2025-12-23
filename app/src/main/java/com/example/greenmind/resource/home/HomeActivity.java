@@ -90,7 +90,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         binding.fabGemini.setOnClickListener(v -> {
-            startActivity(new Intent(this, ChatActivity.class));
+            ChatActivity chatSheet = new ChatActivity();
+            chatSheet.show(getSupportFragmentManager(), "ChatBottomSheet");
         });
     }
 

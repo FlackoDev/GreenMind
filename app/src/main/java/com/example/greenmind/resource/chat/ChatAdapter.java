@@ -28,9 +28,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == ChatMessage.TYPE_USER) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_right, parent, false);
             return new UserViewHolder(view);
-        } else {
+        } else if (viewType == ChatMessage.TYPE_GEMINI) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_left, parent, false);
             return new GeminiViewHolder(view);
+        } else {
+            // Layout per lo stato "sta scrivendo"
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_left, parent, false);
+            return new TypingViewHolder(view);
         }
     }
 
@@ -39,8 +43,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ChatMessage message = messages.get(position);
         if (holder instanceof UserViewHolder) {
             ((UserViewHolder) holder).textMessage.setText(message.getText());
-        } else {
+        } else if (holder instanceof GeminiViewHolder) {
             ((GeminiViewHolder) holder).textMessage.setText(message.getText());
+        } else if (holder instanceof TypingViewHolder) {
+            ((TypingViewHolder) holder).textMessage.setText("Eco sta scrivendo...");
         }
     }
 
@@ -60,6 +66,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     static class GeminiViewHolder extends RecyclerView.ViewHolder {
         TextView textMessage;
         GeminiViewHolder(View itemView) {
+            super(itemView);
+            textMessage = itemView.findViewById(R.id.text_message);
+        }
+    }
+
+    static class TypingViewHolder extends RecyclerView.ViewHolder {
+        TextView textMessage;
+        TypingViewHolder(View itemView) {
             super(itemView);
             textMessage = itemView.findViewById(R.id.text_message);
         }
