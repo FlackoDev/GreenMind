@@ -2,6 +2,7 @@ package com.example.greenmind.resource.quiz;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -38,6 +39,9 @@ public class QuizActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         setupBottomNavigation();
+        
+        // Il bottone per aggiungere quiz è visibile solo agli admin
+        binding.btnAddQuiz.setVisibility(sessionManager.isAdmin() ? View.VISIBLE : View.GONE);
         
         binding.btnAddQuiz.setOnClickListener(v -> {
             startActivity(new Intent(this, AddQuizActivity.class));

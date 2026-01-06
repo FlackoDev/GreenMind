@@ -8,7 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 26;
+    public static final int DB_VERSION = 27; // Incrementato per admin e PIN
 
     public static final String T_QUIZ = "Quiz";
     public static final String T_QUESTION = "Question";
@@ -34,7 +34,17 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + T_QUIZ + " (id INTEGER PRIMARY KEY, title TEXT NOT NULL, category TEXT, difficulty TEXT, points INTEGER DEFAULT 0, numQuestions INTEGER DEFAULT 0);");
-        db.execSQL("CREATE TABLE " + T_USER + " (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, passwordHash TEXT NOT NULL, failedAttempts INTEGER DEFAULT 0, lockoutUntil INTEGER DEFAULT 0, createdAt INTEGER DEFAULT 0);");
+        db.execSQL("CREATE TABLE " + T_USER + " (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT NOT NULL, " +
+                "email TEXT NOT NULL UNIQUE, " +
+                "passwordHash TEXT NOT NULL, " +
+                "role TEXT DEFAULT 'user', " + // Nuova colonna ruolo
+                "adminPinHash TEXT, " +         // Nuova colonna PIN
+                "failedAttempts INTEGER DEFAULT 0, " +
+                "lockoutUntil INTEGER DEFAULT 0, " +
+                "createdAt INTEGER DEFAULT 0" +
+                ");");
         db.execSQL("CREATE TABLE " + T_LEARNING_CONTENT + " (id INTEGER PRIMARY KEY, title TEXT NOT NULL, category TEXT, readingTimeMin INTEGER NOT NULL DEFAULT 0, preview TEXT, content TEXT);");
         db.execSQL("CREATE TABLE " + T_BADGE + " (id INTEGER PRIMARY KEY, name TEXT NOT NULL, description TEXT, requiredPoints INTEGER NOT NULL DEFAULT 0);");
         db.execSQL("CREATE TABLE " + T_LEVEL + " (id INTEGER PRIMARY KEY, number INTEGER NOT NULL, requiredPoints INTEGER NOT NULL DEFAULT 0);");
@@ -87,10 +97,26 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(13, 7, 'Carbone', 0), (14, 7, 'Sole', 1), " +
                 "(15, 8, 'Sì', 1), (16, 8, 'No', 0);");
 
-        // 6. UTENTE E STATISTICHE
-        String hashedPw = BCrypt.hashpw("password123", BCrypt.gensalt());
-        db.execSQL("INSERT INTO " + T_USER + " (id, name, email, passwordHash, createdAt) VALUES (1, 'Rachele', 'rachele@gmail.com', '" + hashedPw + "', " + System.currentTimeMillis() + ");");
-        db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (1, 42, 1250, 12);");
+        // 6. UTENTI ADMIN E BASE
+        String hashedPw = BCrypt.hashpw("admin123", BCrypt.gensalt());
+        long now = System.currentTimeMillis();
+
+        // Admin 1: Alessandro M
+        db.execSQL("INSERT INTO " + T_USER + " (name, email, passwordHash, role, createdAt) VALUES " +
+                "('Alessandro M', 'alessandro.m@greenmind.it', '" + hashedPw + "', 'admin', " + now + ");");
+        
+        // Admin 2: Alessandro Z
+        db.execSQL("INSERT INTO " + T_USER + " (name, email, passwordHash, role, createdAt) VALUES " +
+                "('Alessandro Z', 'alessandro.z@greenmind.it', '" + hashedPw + "', 'admin', " + now + ");");
+        
+        // Admin 3: Rachele
+        db.execSQL("INSERT INTO " + T_USER + " (name, email, passwordHash, role, createdAt) VALUES " +
+                "('Rachele', 'rachele@greenmind.it', '" + hashedPw + "', 'admin', " + now + ");");
+
+        // Statistiche per gli admin (necessarie per non rompere query di join)
+        db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (1, 0, 0, 0);");
+        db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (2, 0, 0, 0);");
+        db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (3, 0, 0, 0);");
     }
 
     @Override

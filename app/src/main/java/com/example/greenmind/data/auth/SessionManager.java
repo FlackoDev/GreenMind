@@ -15,6 +15,7 @@ public class SessionManager {
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_USER_ROLE = "user_role"; // Nuova chiave per il ruolo
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_DARK_MODE = "dark_mode";
     
@@ -46,11 +47,12 @@ public class SessionManager {
         }
     }
 
-    public void createLoginSession(int userId, String name, String email) {
+    public void createLoginSession(int userId, String name, String email, String role) {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.putInt(KEY_USER_ID, userId);
         editor.putString(KEY_USER_NAME, name);
         editor.putString(KEY_USER_EMAIL, email);
+        editor.putString(KEY_USER_ROLE, role); // Salviamo il ruolo
         resetGlobalFailures();
         editor.apply();
     }
@@ -69,6 +71,14 @@ public class SessionManager {
 
     public String getUserEmail() {
         return sharedPreferences.getString(KEY_USER_EMAIL, "");
+    }
+
+    public String getUserRole() {
+        return sharedPreferences.getString(KEY_USER_ROLE, "user");
+    }
+
+    public boolean isAdmin() {
+        return "admin".equalsIgnoreCase(getUserRole());
     }
 
     public void logout() {

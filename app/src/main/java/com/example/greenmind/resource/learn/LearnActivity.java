@@ -2,9 +2,11 @@ package com.example.greenmind.resource.learn;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.greenmind.R;
+import com.example.greenmind.data.auth.SessionManager;
 import com.example.greenmind.databinding.ActivityLearnBinding;
 import com.example.greenmind.resource.classifica.ClassificaActivity;
 import com.example.greenmind.resource.home.HomeActivity;
@@ -21,6 +23,7 @@ public class LearnActivity extends AppCompatActivity {
     private ActivityLearnBinding binding;
     private LearningContentAdapter adapter;
     private LearningContentDao learningContentDao;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +31,19 @@ public class LearnActivity extends AppCompatActivity {
         binding = ActivityLearnBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        sessionManager = new SessionManager(this);
+        learningContentDao = new LearningContentDao(this);
+
         setupBottomNavigation();
         setupRecycler();
+
+        // Il bottone per aggiungere contenuti è visibile solo agli admin
+        binding.btnAddContent.setVisibility(sessionManager.isAdmin() ? View.VISIBLE : View.GONE);
+
         binding.btnAddContent.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddLearningContentActivity.class);
             startActivity(intent);
         });
-
-        learningContentDao = new LearningContentDao(this);
     }
 
     @Override

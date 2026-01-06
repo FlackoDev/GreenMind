@@ -25,10 +25,11 @@ public class LeaderboardEntryDao {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         // Query che unisce User e UserStats con LEFT JOIN per non escludere utenti senza statistiche
-        // COALESCE gestisce il caso in cui totalPoints sia NULL (utente appena creato o dati corrotti)
+        // Escludiamo gli utenti con ruolo 'admin' dalla classifica
         String query = "SELECT u.id, u.name, COALESCE(s.totalPoints, 0) as totalPoints " +
                 "FROM " + DBHelper.T_USER + " u " +
                 "LEFT JOIN " + DBHelper.T_USER_STATS + " s ON u.id = s.userId " +
+                "WHERE u.role != 'admin' " +
                 "ORDER BY totalPoints DESC";
 
         Cursor cursor = db.rawQuery(query, null);

@@ -107,7 +107,7 @@ public class ProfiloActivity extends AppCompatActivity {
             binding.textLevelBadge.setText("LV. " + level);
         }
 
-        setupBadges(currentPoints);
+        setupBadges(currentPoints, user != null && user.isAdmin());
         setupWeeklyChart(userId);
     }
 
@@ -171,7 +171,7 @@ public class ProfiloActivity extends AppCompatActivity {
         }
     }
 
-    private void setupBadges(int userPoints) {
+    private void setupBadges(int userPoints, boolean isAdmin) {
         List<Badge> allBadges = badgeDao.getAllBadges();
         String highestBadgeName = "ECO BEGINNER";
         
@@ -184,7 +184,12 @@ public class ProfiloActivity extends AppCompatActivity {
             }
         }
         
-        binding.textRank.setText(highestBadgeName);
+        // Se è admin, mostra ADMIN come grado, altrimenti mostra il badge più alto
+        if (isAdmin) {
+            binding.textRank.setText("ADMIN");
+        } else {
+            binding.textRank.setText(highestBadgeName);
+        }
 
         badgeAdapter = new BadgeAdapter(allBadges);
         binding.recyclerBadges.setLayoutManager(new GridLayoutManager(this, 3));
