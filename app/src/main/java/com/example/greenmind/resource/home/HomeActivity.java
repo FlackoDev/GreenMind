@@ -54,7 +54,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadDailyChallenge() {
-        dailyQuiz = quizManager.getDailyQuiz();
+        // Ora prendiamo il quiz del giorno con più punti
+        dailyQuiz = quizManager.getFeaturedDailyQuiz();
         
         if (dailyQuiz != null) {
             binding.textChallengeName.setText(dailyQuiz.getTitle());

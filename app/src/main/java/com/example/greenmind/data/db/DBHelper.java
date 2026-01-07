@@ -8,7 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "greenmind.db";
-    public static final int DB_VERSION = 27; // Incrementato per admin e PIN
+    public static final int DB_VERSION = 30; // Incrementato per risposte multiple
 
     public static final String T_QUIZ = "Quiz";
     public static final String T_QUESTION = "Question";
@@ -16,6 +16,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String T_USER = "User";
     public static final String T_USER_STATS = "UserStats";
     public static final String T_QUIZ_RESULT = "QuizResult";
+    public static final String T_GIVEN_ANSWER = "GivenAnswer"; 
     public static final String T_LEARNING_CONTENT = "LearningContent";
     public static final String T_BADGE = "Badge";
     public static final String T_LEVEL = "Level";
@@ -39,8 +40,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "name TEXT NOT NULL, " +
                 "email TEXT NOT NULL UNIQUE, " +
                 "passwordHash TEXT NOT NULL, " +
-                "role TEXT DEFAULT 'user', " + // Nuova colonna ruolo
-                "adminPinHash TEXT, " +         // Nuova colonna PIN
+                "role TEXT DEFAULT 'user', " + 
+                "adminPinHash TEXT, " +         
                 "failedAttempts INTEGER DEFAULT 0, " +
                 "lockoutUntil INTEGER DEFAULT 0, " +
                 "createdAt INTEGER DEFAULT 0" +
@@ -52,30 +53,38 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + T_ANSWER_OPTION + " (id INTEGER PRIMARY KEY, questionId INTEGER NOT NULL, text TEXT NOT NULL, isCorrect INTEGER NOT NULL DEFAULT 0, FOREIGN KEY(questionId) REFERENCES " + T_QUESTION + "(id) ON UPDATE CASCADE ON DELETE CASCADE);");
         db.execSQL("CREATE TABLE " + T_USER_STATS + " (userId INTEGER PRIMARY KEY, totalQuizzes INTEGER NOT NULL DEFAULT 0, totalPoints INTEGER NOT NULL DEFAULT 0, weeklyChangePerc REAL NOT NULL DEFAULT 0, FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) ON UPDATE CASCADE ON DELETE CASCADE);");
         db.execSQL("CREATE TABLE " + T_QUIZ_RESULT + " (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, quizId INTEGER NOT NULL, score INTEGER NOT NULL DEFAULT 0, date INTEGER NOT NULL, FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY(quizId) REFERENCES " + T_QUIZ + "(id) ON UPDATE CASCADE ON DELETE CASCADE);");
+        
+        db.execSQL("CREATE TABLE " + T_GIVEN_ANSWER + " (" +
+                "userId INTEGER NOT NULL, " +
+                "quizId INTEGER NOT NULL, " +
+                "questionId INTEGER NOT NULL, " +
+                "selectedOptionId INTEGER NOT NULL, " +
+                "PRIMARY KEY (userId, quizId, questionId, selectedOptionId), " + // PK aggiornata
+                "FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) ON DELETE CASCADE, " +
+                "FOREIGN KEY(quizId) REFERENCES " + T_QUIZ + "(id) ON DELETE CASCADE, " +
+                "FOREIGN KEY(questionId) REFERENCES " + T_QUESTION + "(id) ON DELETE CASCADE, " +
+                "FOREIGN KEY(selectedOptionId) REFERENCES " + T_ANSWER_OPTION + "(id) ON DELETE CASCADE);");
+
         db.execSQL("CREATE TABLE " + T_LEADERBOARD + " (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, points INTEGER NOT NULL DEFAULT 0, position INTEGER NOT NULL DEFAULT 0, FOREIGN KEY(userId) REFERENCES " + T_USER + "(id) ON UPDATE CASCADE ON DELETE CASCADE);");
 
         insertSampleData(db);
     }
 
     private void insertSampleData(SQLiteDatabase db) {
-        // 1. BADGES
         db.execSQL("INSERT INTO " + T_BADGE + " (id, name, description, requiredPoints) VALUES (1, 'GREEN SCOUT', 'Primi passi', 100), (2, 'NATURE LOVER', 'Appassionato', 250), (3, 'ECO WARRIOR', 'Guerriero', 500), (4, 'RECYCLE MASTER', 'Maestro del riciclo', 1000), (5, 'EARTH GUARDIAN', 'Protettore della terra', 2500), (6, 'PLANET SAVIOR', 'Salvatore del pianeta', 5000), (7, 'CLIMATE HERO', 'Eroe del clima', 10000), (8, 'GREEN LEGEND', 'Leggenda verde', 25000), (9, 'ECO MESSIAH', 'Il messia dell''ecologia', 100000);");
         
-        // 2. LEARNING CONTENT
         db.execSQL("INSERT INTO " + T_LEARNING_CONTENT + " (id, title, category, readingTimeMin, preview, content) VALUES " +
-                "(1, 'Come gestire le emergenze climatiche', 'EMERGENZE CLIMATICHE', 5, 'Le ondate di calore e le inondazioni sono sempre più frequenti. Ecco una guida pratica su cosa fare in caso...', 'Le ondate di calore e le inondazioni sono sempre più frequenti a causa del riscaldamento globale. È fondamentale essere preparati.\\n\\nIn caso di ondate di calore:\\n1. Evita di uscire nelle ore più calde (dalle 11 alle 18).\\n2. Bevi molta acqua, anche se non senti sete.\\n3. Mantieni la casa fresca chiudendo le tapparelle durante il giorno.\\n4. Indossa abiti leggeri e di fibre naturali come cotone o lino.\\n\\nIn caso di inondazioni:\\n1. Sali ai piani superiori e non scendere mai in cantina o garage.\\n2. Chiudi l''interruttore generale della corrente elettrica e del gas.\\n3. Segui le istruzioni delle autorità via radio o social media.\\n4. Non tentare di attraversare zone allagate a piedi o in auto, la forza dell''acqua può essere ingannevole.\\n\\nLa prevenzione è la chiave per ridurre i rischi legati ai cambiamenti climatici estremi. Investire in infrastrutture resilienti e informare la popolazione sono passi cruciali per un futuro più sicuro per tutti.'), " +
-                "(2, 'Guida alla raccolta differenziata', 'GESTIONE RIFIUTI', 3, 'Separare correttamente i rifiuti è il primo passo per un futuro sostenibile. Scopri dove buttare il Tetra Pak e...', 'Separare correttamente i rifiuti è il primo passo fondamentale per un futuro sostenibile e per favorire l''economia circolare.\\n\\nEcco alcuni errori comuni da evitare:\\n1. Il Tetra Pak: in molti comuni va con la carta, in altri con la plastica. Controlla sempre le disposizioni locali.\\n2. Scontrini: non vanno nella carta! Sono fatti di carta termica che non è riciclabile con la carta normale. Vanno nel secco residuo.\\n3. Ceramica e Pyrex: non sono vetro! Se rompi un piatto o una pirofila, non metterli nel contenitore del vetro, ma nel secco.\\n4. Plastica sporca: i contenitori per alimenti devono essere svuotati e sciacquati grossolanamente prima di essere riciclati.\\n\\nPerché riciclare?\\nIl riciclo riduce l''estrazione di nuove materie prime, risparmia energia e diminuisce le emissioni di gas serra prodotte dalle discariche. Ogni piccolo gesto conta per proteggere il nostro pianeta. Ricordati che la gerarchia dei rifiuti mette al primo posto la riduzione della produzione di rifiuti stessi, poi il riuso e infine il riciclo.'), " +
+                "(1, 'Come gestire le emergenze climatiche', 'EMERGENZE CLIMATICHE', 5, 'Le ondate di calore e le inondazioni sono sempre più frequenti.', 'Contenuto completo...'), " +
+                "(2, 'Guida alla raccolta differenziata', 'GESTIONE RIFIUTI', 3, 'Separare correttamente i rifiuti.', 'Contenuto completo...'), " +
                 "(3, 'Il Futuro delle Energie Rinnovabili', 'ENERGIA', 8, 'Sole e vento per il pianeta.', 'Le rinnovabili sono il futuro...'), " +
                 "(4, 'Ridurre lo spreco d''acqua', 'CONSUMI', 4, 'Piccoli gesti, grandi risparmi.', 'Chiudi il rubinetto quando puoi...');");
 
-        // 3. QUIZ
         db.execSQL("INSERT INTO " + T_QUIZ + " (id, title, category, difficulty, points, numQuestions) VALUES " +
                 "(1, 'Quiz Rifiuti Base', 'Gestione Rifiuti', 'Facile', 100, 2), " +
                 "(2, 'Cambiamento Climatico', 'Emergenze', 'Medio', 200, 2), " +
                 "(3, 'Risparmio Idrico', 'Sostenibilità', 'Facile', 150, 2), " +
                 "(4, 'Energie Rinnovabili', 'Energia', 'Difficile', 300, 2);");
 
-        // 4. DOMANDE
         db.execSQL("INSERT INTO " + T_QUESTION + " (id, quizId, text, explanation) VALUES " +
                 "(1, 1, 'Dove va gettato un bicchiere di vetro rotto?', 'Il vetro cristallo va nel secco.'), " +
                 "(2, 1, 'Gli scontrini vanno nella carta?', 'No, carta termica va nel secco.'), " +
@@ -86,7 +95,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(7, 4, 'Qual è una fonte rinnovabile?', 'Il sole è una fonte inesauribile.'), " +
                 "(8, 4, 'L''eolico usa il vento?', 'Sì, trasforma il vento in energia.');");
 
-        // 5. RISPOSTE
         db.execSQL("INSERT INTO " + T_ANSWER_OPTION + " (id, questionId, text, isCorrect) VALUES " +
                 "(1, 1, 'Vetro', 0), (2, 1, 'Secco', 1), " +
                 "(3, 2, 'Sì', 0), (4, 2, 'No', 1), " +
@@ -97,23 +105,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(13, 7, 'Carbone', 0), (14, 7, 'Sole', 1), " +
                 "(15, 8, 'Sì', 1), (16, 8, 'No', 0);");
 
-        // 6. UTENTI ADMIN E BASE
         String hashedPw = BCrypt.hashpw("admin123", BCrypt.gensalt());
         long now = System.currentTimeMillis();
 
-        // Admin 1: Alessandro M
-        db.execSQL("INSERT INTO " + T_USER + " (name, email, passwordHash, role, createdAt) VALUES " +
-                "('Alessandro M', 'alessandro.m@greenmind.it', '" + hashedPw + "', 'admin', " + now + ");");
-        
-        // Admin 2: Alessandro Z
-        db.execSQL("INSERT INTO " + T_USER + " (name, email, passwordHash, role, createdAt) VALUES " +
-                "('Alessandro Z', 'alessandro.z@greenmind.it', '" + hashedPw + "', 'admin', " + now + ");");
-        
-        // Admin 3: Rachele
-        db.execSQL("INSERT INTO " + T_USER + " (name, email, passwordHash, role, createdAt) VALUES " +
-                "('Rachele', 'rachele@greenmind.it', '" + hashedPw + "', 'admin', " + now + ");");
+        db.execSQL("INSERT INTO " + T_USER + " (name, email, passwordHash, role, createdAt) VALUES ('Alessandro M', 'alessandro.m@greenmind.it', '" + hashedPw + "', 'admin', " + now + ");");
+        db.execSQL("INSERT INTO " + T_USER + " (name, email, passwordHash, role, createdAt) VALUES ('Alessandro Z', 'alessandro.z@greenmind.it', '" + hashedPw + "', 'admin', " + now + ");");
+        db.execSQL("INSERT INTO " + T_USER + " (name, email, passwordHash, role, createdAt) VALUES ('Rachele', 'rachele.b@greenmind.it', '" + hashedPw + "', 'admin', " + now + ");");
 
-        // Statistiche per gli admin (necessarie per non rompere query di join)
         db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (1, 0, 0, 0);");
         db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (2, 0, 0, 0);");
         db.execSQL("INSERT INTO " + T_USER_STATS + " (userId, totalQuizzes, totalPoints, weeklyChangePerc) VALUES (3, 0, 0, 0);");
@@ -121,6 +119,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + T_GIVEN_ANSWER);
         db.execSQL("DROP TABLE IF EXISTS " + T_ANSWER_OPTION);
         db.execSQL("DROP TABLE IF EXISTS " + T_QUESTION);
         db.execSQL("DROP TABLE IF EXISTS " + T_QUIZ_RESULT);

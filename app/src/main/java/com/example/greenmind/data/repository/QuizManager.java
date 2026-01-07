@@ -8,7 +8,9 @@ import com.example.greenmind.data.db.DBHelper;
 import com.example.greenmind.data.db.dao.QuizDao;
 import com.example.greenmind.resource.model.Quiz;
 
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class QuizManager {
 
@@ -16,8 +18,8 @@ public class QuizManager {
     private final QuizDao quizDao;
     private final DBHelper dbHelper;
 
-    // Data di riferimento: 1 Gennaio 2024 (puoi cambiarla con quella che preferisci)
-    private static final long START_DATE_MILLIS = 1704063600000L; 
+    // Data di riferimento: 1 Gennaio 2024
+    private static final long START_DATE_MILLIS = 1704063600000L;
 
     public QuizManager(Context context) {
         this.context = context;
@@ -26,28 +28,64 @@ public class QuizManager {
     }
 
     /**
-     * Calcola l'ID del quiz per oggi.
+     * Calcola gli ID dei 3 quiz per oggi.
      * Rotazione basata sul numero di giorni trascorsi dalla START_DATE.
      */
-    public int getDailyQuizId() {
+    public List<Integer> getDailyQuizIds() {
         long today = System.currentTimeMillis();
         long diff = today - START_DATE_MILLIS;
-        
-        // Se per qualche motivo la data di sistema è prima della data di inizio
         if (diff < 0) diff = 0;
 
         int daysPassed = (int) (diff / (24 * 60 * 60 * 1000));
+        int totalQuizzes = quizDao.getCount();
         
-        // Supponiamo di avere 30 quiz. Ruotiamo tra 1 e 30.
-        return (daysPassed % 30) + 1;
+        List<Integer> dailyIds = new ArrayList<>();
+        if (totalQuizzes == 0) return dailyIds;
+
+        // Se abbiamo meno di 3 quiz, li prendiamo tutti
+        if (totalQuizzes <= 3) {
+            for (int i = 1; i <= totalQuizzes; i++) {
+                dailyIds.add(i);
+            }
+            return dailyIds;
+        }
+
+        // Logica di rotazione: ogni giorno saltiamo di 3
+        int startIndex = (daysPassed * 3) % totalQuizzes;
+        
+        // Recuperiamo tutti gli ID disponibili (assumendo ID sequenziali o quasi)
+        // Per sicurezza, potremmo recuperare tutti i quiz e poi scegliere
+        List<Quiz> all = quizDao.getAll();
+        for (int i = 0; i < 3; i++) {
+            int index = (startIndex + i) % all.size();
+            dailyIds.add(all.get(index).getId());
+        }
+
+        return dailyIds;
     }
 
     /**
-     * Recupera il quiz di oggi dal Database.
+     * Recupera i 3 quiz di oggi dal Database.
      */
-    public Quiz getDailyQuiz() {
-        int quizId = getDailyQuizId();
-        return quizDao.getById(quizId);
+    public List<Quiz> getDailyQuizzes() {
+        List<Integer> ids = getDailyQuizIds();
+        return quizDao.getByIds(ids);
+    }
+
+    /**
+     * Recupera il quiz con più punti tra quelli del giorno (per la Home).
+     */
+    public Quiz getFeaturedDailyQuiz() {
+        List<Quiz> dailyQuizzes = getDailyQuizzes();
+        if (dailyQuizzes.isEmpty()) return null;
+
+        Quiz featured = dailyQuizzes.get(0);
+        for (Quiz q : dailyQuizzes) {
+            if (q.getPoints() > featured.getPoints()) {
+                featured = q;
+            }
+        }
+        return featured;
     }
 
     /**

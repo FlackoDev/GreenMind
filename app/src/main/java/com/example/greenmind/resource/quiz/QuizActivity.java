@@ -55,9 +55,17 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        List<Quiz> allQuizzes = quizDao.getAll();
+        List<Quiz> quizzesToShow;
         
-        QuizAdapter adapter = new QuizAdapter(allQuizzes, quizManager, sessionManager.getUserId(), (quiz, isCompleted) -> {
+        // Se è admin, mostra tutti i quiz in ordine di creazione (per vedere subito il nuovo)
+        // Se è utente normale, mostra solo i 3 del giorno
+        if (sessionManager.isAdmin()) {
+            quizzesToShow = quizDao.getAll();
+        } else {
+            quizzesToShow = quizManager.getDailyQuizzes();
+        }
+        
+        QuizAdapter adapter = new QuizAdapter(quizzesToShow, quizManager, sessionManager.getUserId(), (quiz, isCompleted) -> {
             Intent intent = new Intent(QuizActivity.this, QuizPlayActivity.class);
             intent.putExtra("quiz_id", quiz.getId());
             intent.putExtra("is_view_only", isCompleted);

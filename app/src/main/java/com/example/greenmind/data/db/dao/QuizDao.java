@@ -3,6 +3,7 @@ package com.example.greenmind.data.db.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.greenmind.data.db.DBHelper;
@@ -68,12 +69,13 @@ public class QuizDao {
         List<Quiz> result = new ArrayList<>();
         Cursor c = null;
         try {
+            // Cambiato l'ordinamento: ora ordiniamo per ID così i nuovi vanno in coda
             c = db.query(
                     DBHelper.T_QUIZ,
                     null,
                     null, null,
                     null, null,
-                    COL_TITLE + " ASC"
+                    COL_ID + " ASC"
             );
             while (c.moveToNext()) {
                 result.add(fromCursor(c));
@@ -84,6 +86,35 @@ public class QuizDao {
         }
     }
 
+    public int getCount() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        return (int) DatabaseUtils.queryNumEntries(db, DBHelper.T_QUIZ);
+    }
+
+    public List<Quiz> getByIds(List<Integer> ids) {
+        List<Quiz> quizzes = new ArrayList<>();
+        if (ids == null || ids.isEmpty()) return quizzes;
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        StringBuilder whereClause = new StringBuilder(COL_ID + " IN (");
+        for (int i = 0; i < ids.size(); i++) {
+            whereClause.append(ids.get(i));
+            if (i < ids.size() - 1) whereClause.append(",");
+        }
+        whereClause.append(")");
+
+        Cursor c = null;
+        try {
+            c = db.query(DBHelper.T_QUIZ, null, whereClause.toString(), null, null, null, null);
+            while (c.moveToNext()) {
+                quizzes.add(fromCursor(c));
+            }
+        } finally {
+            if (c != null) c.close();
+        }
+        return quizzes;
+    }
+
     public int deleteById(int id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         return db.delete(DBHelper.T_QUIZ, COL_ID + "=?", new String[]{String.valueOf(id)});
@@ -91,7 +122,9 @@ public class QuizDao {
 
     private ContentValues toContentValues(Quiz quiz) {
         ContentValues cv = new ContentValues();
-        cv.put(COL_ID, quiz.getId());
+        if (quiz.getId() > 0) {
+            cv.put(COL_ID, quiz.getId());
+        }
         cv.put(COL_TITLE, quiz.getTitle());
         cv.put(COL_CATEGORY, quiz.getCategory());
         cv.put(COL_DIFFICULTY, quiz.getDifficulty());
