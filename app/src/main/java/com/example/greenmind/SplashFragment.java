@@ -17,19 +17,21 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 
+import com.example.greenmind.data.auth.SessionManager;
 import com.example.greenmind.databinding.FragmentSplashBinding;
 
 public class SplashFragment extends Fragment {
 
     private FragmentSplashBinding binding;
+    private SessionManager sessionManager;
 
     private static final int SPLASH_DELAY = 3000;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // "Gonfia" (inflates) il layout XML e lo collega a questa classe
         binding = FragmentSplashBinding.inflate(inflater, container, false);
+        sessionManager = new SessionManager(requireContext());
         return binding.getRoot();
     }
 
@@ -40,8 +42,15 @@ public class SplashFragment extends Fragment {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                NavHostFragment.findNavController(SplashFragment.this)
-                        .navigate(R.id.action_splashFragment_to_loginFragment);
+                if (isAdded()) {
+                    if (sessionManager.isLoggedIn()) {
+                        NavHostFragment.findNavController(SplashFragment.this)
+                                .navigate(R.id.action_splashFragment_to_homeActivity);
+                    } else {
+                        NavHostFragment.findNavController(SplashFragment.this)
+                                .navigate(R.id.action_splashFragment_to_loginFragment);
+                    }
+                }
             }
         }, SPLASH_DELAY);
     }

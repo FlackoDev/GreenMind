@@ -16,6 +16,11 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_homeActivity"
+            app:destination="@id/homeActivity"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <!-- Login Fragment -->
@@ -30,7 +35,6 @@
         <action
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
-        <!-- AZIONE CORRETTA PER ANDARE ALLA HOME -->
         <action
             android:id="@+id/action_loginFragment_to_homeActivity"
             app:destination="@id/homeActivity"
@@ -55,7 +59,6 @@
         android:name="com.example.greenmind.resource.auth.ForgotPasswordFragment"
         android:label="ForgotPassword"
         tools:layout="@layout/fragment_forgot_password">
-        <!-- AZIONE AGGIUNTA PER TORNARE AL LOGIN -->
         <action
             android:id="@+id/action_forgotPasswordFragment_to_loginFragment"
             app:destination="@id/loginFragment"

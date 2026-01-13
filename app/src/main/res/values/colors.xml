@@ -17,7 +17,7 @@
     <color name="header_background">#E8F5E9</color>
     <color name="input_background">#F3F3F3</color>
 
-    <!-- Feedback Colors -->
+    <!-- Feedback Colors (Light Mode) -->
     <color name="correct_background">#E8F5E9</color>
     <color name="correct_stroke">#4CAF50</color>
     <color name="correct_text">#2E7D32</color>
@@ -50,6 +50,8 @@
     <color name="transparent">#00000000</color>
     
     <!-- Switch -->
+    <color name="switch_thumb_on">#FFFFFF</color>
+    <color name="switch_thumb_off">#F5F5F5</color>
     <color name="switch_track_on">#08BC57</color>
     <color name="switch_track_off">#BDBDBD</color>
 </resources>
